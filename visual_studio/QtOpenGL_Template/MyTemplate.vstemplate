@@ -1,0 +1,32 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>QtOpenGL Template</Name>
+    <Description>&lt;No description available&gt;</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>QtOpenGL Template</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.png</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="QtOpenGL_Template.vcxproj" File="QtOpenGL_Template.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.vcxproj.filters">QtOpenGL_Template.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="main.cpp">main.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="QtOGL_Window.cpp">QtOGL_Window.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="QtOGL_Window.h">QtOGL_Window.h</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="QtOGL_Window.ui">QtOGL_Window.ui</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="QtOGL_Window.qrc">QtOGL_Window.qrc</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.rc">QtOpenGL_Template.rc</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.ico">QtOpenGL_Template.ico</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ui_QtOGL_Window.h">GeneratedFiles\ui_QtOGL_Window.h</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="qrc_QtOGL_Window.cpp">GeneratedFiles\qrc_QtOGL_Window.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="moc_QtOGL_Window.cpp">GeneratedFiles\Debug\moc_QtOGL_Window.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="moc_QtOGL_Window.cpp">GeneratedFiles\Release\moc_QtOGL_Window.cpp</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>
