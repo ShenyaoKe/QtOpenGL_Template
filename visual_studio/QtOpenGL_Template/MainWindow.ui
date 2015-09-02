@@ -1,8 +1,8 @@
 <UI version="4.0" >
- <class>QtOGL_WindowClass</class>
- <widget class="QMainWindow" name="QtOGL_WindowClass" >
+ <class>MainWindowClass</class>
+ <widget class="QMainWindow" name="MainWindowClass" >
   <property name="objectName" >
-   <string notr="true">QtOGL_WindowClass</string>
+   <string notr="true">MainWindowClass</string>
   </property>
   <property name="geometry" >
    <rect>
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>QtOGL_Window</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QMenuBar" name="menuBar" />
   <widget class="QToolBar" name="mainToolBar" />
@@ -23,7 +23,7 @@
  <layoutDefault spacing="6" margin="11" />
  <pixmapfunction></pixmapfunction>
  <resources>
-   <include location="QtOGL_Window.qrc"/>
+   <include location="MainWindow.qrc"/>
  </resources>
  <connections/>
 </UI>

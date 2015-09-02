@@ -1,10 +1,13 @@
-#include "QtOGL_Window.h"
+#include "MainWindow.h"
+
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QtOGL_Window w;
-	w.show();
+	/*MainWindow w;
+	w.show();*/
+	OGLViewer oglWindow;
+	oglWindow.show();
 	return a.exec();
 }
