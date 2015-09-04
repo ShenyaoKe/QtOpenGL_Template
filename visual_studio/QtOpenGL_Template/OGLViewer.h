@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __OGLVIEWER__
+#define __OGLVIEWER__
 
 #include "GL/glew.h"
 
@@ -16,3 +18,4 @@ protected:
 	void paintGL();
 };
 
+#endif // __OGLVIEWER__
