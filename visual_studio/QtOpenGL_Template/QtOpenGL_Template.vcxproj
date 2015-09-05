@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\OpenGL_Utils\GLSLProgram.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -228,8 +229,13 @@
     <Image Include="ProjectIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h" />
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h" />
     <ClInclude Include="OGLViewer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="frag.frag" />
+    <None Include="vert.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

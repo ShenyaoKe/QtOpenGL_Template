@@ -7,6 +7,8 @@
 #include <QGLWidget>
 //#include <QGLFunctions>
 
+#include "OpenGL_Utils/GLSLProgram.h"
+
 // OpenGL Window in Qt
 class OGLViewer : public QGLWidget
 {
