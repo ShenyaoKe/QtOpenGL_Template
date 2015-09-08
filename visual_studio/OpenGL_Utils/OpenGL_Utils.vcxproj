@@ -21,10 +21,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\OpenGL_Utils\GLSLProgram.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVBO.cpp" />
+    <ClCompile Include="..\..\src\OpenGL_Utils\ogl_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVBO.h" />
+    <ClInclude Include="..\..\src\OpenGL_Utils\ogl_utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenGL_Utils.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{95874169-3159-442D-BD3A-8D223BBEC7CE}</ProjectGuid>

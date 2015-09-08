@@ -13,6 +13,13 @@ OGLViewer::~OGLViewer()
 void OGLViewer::initializeGL()
 {
 	glewInit();
+
+	const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+	const GLubyte* version = glGetString(GL_VERSION); // version as a string
+	printf("Renderer: %s\n", renderer);
+	printf("OpenGL version supported %s\n", version);
+	//gl_log("renderer: %s\nversion: %s\n", renderer, version);
+
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
@@ -22,9 +29,9 @@ void OGLViewer::initializeGL()
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	//glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glEnable(GL_CULL_FACE); // cull face
-	//glCullFace(GL_BACK); // cull back face
-	//glFrontFace(GL_CCW); // set counter-clock-wise vertex order to mean the front
+	glEnable(GL_CULL_FACE); // cull face
+	glCullFace(GL_BACK); // cull back face
+	glFrontFace(GL_CCW); // set counter-clock-wise vertex order to mean the front
 	
 
 	//////////////////////////////////////////////////////////////////////////
@@ -50,14 +57,19 @@ void OGLViewer::paintGL()
 
 	GLdouble verts[] = {
 		0.0f, 0.5f, 0.0f,
-		0.5f, -0.5f, 1.0f,
-		-0.5f, -0.5f, -1.0f
+		-0.5f, -0.5f, -1.0f,
+		0.5f, -0.5f, 1.0f
 	};
-	GLdouble colors[] = {
+	GLdouble *colors = new GLdouble[12];
+	GLdouble colors2[] = {
 		1.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 1.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 1.0f
 	};
+	for (int i = 0; i < 12; i++)
+	{
+		colors[i] = colors2[i];
+	}
 	//pts vbo
 	GLuint pts_vbo;
 	glGenBuffers(1, &pts_vbo);
@@ -68,6 +80,8 @@ void OGLViewer::paintGL()
 	glGenBuffers(1, &color_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 12, colors, GL_STATIC_DRAW);
+
+	delete colors;
 
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
