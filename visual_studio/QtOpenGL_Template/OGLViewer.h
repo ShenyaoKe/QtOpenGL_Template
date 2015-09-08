@@ -1,9 +1,13 @@
 #pragma once
+#ifndef __OGLVIEWER__
+#define __OGLVIEWER__
 
 #include "GL/glew.h"
 
 #include <QGLWidget>
 //#include <QGLFunctions>
+
+#include "OpenGL_Utils/GLSLProgram.h"
 
 // OpenGL Window in Qt
 class OGLViewer : public QGLWidget
@@ -16,3 +20,4 @@ protected:
 	void paintGL();
 };
 
+#endif // __OGLVIEWER__

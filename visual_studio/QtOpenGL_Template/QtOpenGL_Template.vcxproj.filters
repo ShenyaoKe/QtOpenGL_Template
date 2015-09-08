@@ -33,6 +33,9 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{3c91046a-2b4b-4919-93a7-208d239378b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,5 +85,13 @@
     <ClInclude Include="OGLViewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="frag.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="vert.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
