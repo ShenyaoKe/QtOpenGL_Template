@@ -1,6 +1,8 @@
 #include "OGLViewer.h"
+#include "Geometry/Mesh.h"
 
-
+vector<Shape*> objectList;
+Mesh *disp_geo;
 OGLViewer::OGLViewer()
 {
 }
@@ -40,8 +42,11 @@ void OGLViewer::initializeGL()
 	GLuint vs, fs, fs2;
 	/* GL shader programme object [combined, to link] */
 	GLuint shader_programme;
-	
 
+	disp_geo = new Mesh("D:\Learning\OpenGL\monkey2.obj");
+	//obj.refine(objectList);
+
+	
 }
 
 void OGLViewer::paintGL()
@@ -52,6 +57,18 @@ void OGLViewer::paintGL()
 	glClearColor(0.5, 0.8, 1.0, 0.5);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	GLdouble* verts;// = new GLdouble[objectList.size() * 9];
+	GLdouble* uvs;// = new GLdouble[objectList.size() * 6];
+	GLdouble* norms;// = new GLdouble[objectList.size() * 9];
+	int vbo_size;
+	exportVBO(disp_geo, vbo_size, verts, uvs, norms);
+	/*for (int i = 0; i < objectList.size(); i++)
+	{
+		exportVertices(objectList[i], (verts + i * 9));
+		exportVertices(objectList[i], (uvs + i * 6));
+		exportVertices(objectList[i], (norms + i * 9));
+
+	}*/
 //////////////////////////////////////////////////////////////////////////
 	GLSLProgram shader("vert.vert", "frag.frag");
 
