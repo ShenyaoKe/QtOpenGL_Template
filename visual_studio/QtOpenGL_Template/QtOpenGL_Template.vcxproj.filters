@@ -87,10 +87,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="frag.frag">
+    <None Include="vert.glsl">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="vert.vert">
+    <None Include="frag.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -8,7 +8,10 @@
 //#include <QGLFunctions>
 
 #include "OpenGL_Utils/GLSLProgram.h"
+#include "Geometry/Mesh.h"
 
+//vector<Shape*> objectList;
+static Mesh *disp_geo;
 // OpenGL Window in Qt
 class OGLViewer : public QGLWidget
 {

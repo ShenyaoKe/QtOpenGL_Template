@@ -1,8 +1,11 @@
 #include "OGLViewer.h"
-#include "Geometry/Mesh.h"
 
-vector<Shape*> objectList;
-Mesh *disp_geo;
+GLdouble* verts;// = new GLdouble[objectList.size() * 9];
+GLdouble* uvs;// = new GLdouble[objectList.size() * 6];
+GLdouble* norms;// = new GLdouble[objectList.size() * 9];
+int vbo_size;
+GLSLProgram* shader;
+
 OGLViewer::OGLViewer()
 {
 }
@@ -38,14 +41,13 @@ void OGLViewer::initializeGL()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	/* GL shader objects for vertex and fragment shader [components] */
-	GLuint vs, fs, fs2;
-	/* GL shader programme object [combined, to link] */
-	GLuint shader_programme;
+	
+	shader = new GLSLProgram("vert.glsl", "frag.glsl");
 
-	disp_geo = new Mesh("D:\Learning\OpenGL\monkey2.obj");
+	disp_geo = new Mesh("D:/Learning/OpenGL/monkey2.obj");
 	//obj.refine(objectList);
-
+	
+	exportVBO(disp_geo, vbo_size, verts, uvs, norms);
 	
 }
 
@@ -57,31 +59,53 @@ void OGLViewer::paintGL()
 	glClearColor(0.5, 0.8, 1.0, 0.5);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	GLdouble* verts;// = new GLdouble[objectList.size() * 9];
+	/*GLdouble* verts;// = new GLdouble[objectList.size() * 9];
 	GLdouble* uvs;// = new GLdouble[objectList.size() * 6];
 	GLdouble* norms;// = new GLdouble[objectList.size() * 9];
 	int vbo_size;
-	exportVBO(disp_geo, vbo_size, verts, uvs, norms);
-	/*for (int i = 0; i < objectList.size(); i++)
-	{
-		exportVertices(objectList[i], (verts + i * 9));
-		exportVertices(objectList[i], (uvs + i * 6));
-		exportVertices(objectList[i], (norms + i * 9));
+	exportVBO(disp_geo, vbo_size, verts, uvs, norms);*/
 
-	}*/
+	
+	
+	//pts vbo
+	GLuint pts_vbo;
+	glGenBuffers(1, &pts_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, pts_vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 9 * vbo_size, verts, GL_STATIC_DRAW);
+
+	GLuint color_vbo;
+	glGenBuffers(1, &color_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 9 * vbo_size, norms, GL_STATIC_DRAW);
+	
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, pts_vbo);
+	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
+	glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(1);
 //////////////////////////////////////////////////////////////////////////
-	GLSLProgram shader("vert.vert", "frag.frag");
+	/*GLSLProgram shader("vert.vert", "frag.frag");
 
 	GLdouble verts[] = {
-		0.0f, 0.5f, 0.0f,
-		-0.5f, -0.5f, -1.0f,
-		0.5f, -0.5f, 1.0f
+		0.443178, 0.390707, -1.336396,
+		-0.056822, -1.014719, -1.493799,
+		0.943178, 0.233305, 0.069031,
+		-0.620477, 0.500000, 0.431426,
+		-1.120477, -0.500000, -0.568574,
+		-0.120477, -0.500000, 0.831426
 	};
 	GLdouble *colors = new GLdouble[12];
 	GLdouble colors2[] = {
-		1.0f, 0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 1.0f
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f,
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f,
 	};
 	for (int i = 0; i < 12; i++)
 	{
@@ -91,42 +115,33 @@ void OGLViewer::paintGL()
 	GLuint pts_vbo;
 	glGenBuffers(1, &pts_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, pts_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 9, verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 18, verts, GL_STATIC_DRAW);
 
-	GLuint color_vbo;
+	/ *GLuint color_vbo;
 	glGenBuffers(1, &color_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 12, colors, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 18, colors, GL_STATIC_DRAW);
+* /
 
 	delete colors;
 
+
 	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, pts_vbo);
+	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, nullptr);*/
+	/*GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, pts_vbo);
 	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, nullptr);
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, color_vbo);
-	glVertexAttribPointer(1, 4, GL_DOUBLE, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_DOUBLE, GL_FALSE, 0, nullptr);
+	glEnableVertexAttribArray(1);*/
 
-	//glUseProgram(*shader.program);
-	shader.use_program();
-	//glUseProgram(shader_programme);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	
-	/*GLdouble verts2[] = {
-		0.0f, 0.0f, 0.0f,
-		0.2f, -0.2f, -1.0f,
-		-0.2f, -0.2f, 1.0f
-	};
-	GLuint vbo2;
-	glGenBuffers(1, &vbo2);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLdouble) * 9, verts2, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, 0);
-	glUseProgram(shader_programme2);
-	glDrawArrays(GL_TRIANGLES, 0, 3);*/
+	shader->use_program();
+	glDrawArrays(GL_TRIANGLES, 0, vbo_size * 3);
 }
