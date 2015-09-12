@@ -12,16 +12,16 @@
 #include "OpenGL_Utils/GLSLProgram.h"
 #include "Geometry/Mesh.h"
 #include "Math/Matrix4D.h"
-//vector<Shape*> objectList;
-static Mesh *disp_geo;
-static GLfloat* verts;
-static GLfloat* uvs;
-static GLfloat* norms;
-static int vbo_size;
-static GLSLProgram* shader;
-static Matrix4D matrix = setTranslation(0.5, 0, 0);
-static int mat_loc;
-static GLfloat mtx[12];
+
+static Mesh *disp_geo;// Display object
+static GLfloat* verts;// vertices vbo
+static GLfloat* uvs;// Texture coordinates vbo
+static GLfloat* norms;// Normal coordinates vbo
+static int vbo_size;// Triangle face numbers
+static GLSLProgram* shader;// OpenGL shader program
+static Matrix4D matrix;// Transform matrix
+static int mat_loc;// Uniform matrix location
+static GLfloat mtx[12];// Uniform matrix buffer
 
 // OpenGL Window in Qt
 class OGLViewer : public QOpenGLWidget
