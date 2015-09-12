@@ -28,6 +28,8 @@ public:
 	bool create(char *vert, char* frag = nullptr, char* geom = nullptr,
 		char* tcs = nullptr, char* tes = nullptr);
 	bool use_program() const;
+
+	int getUniformLocation(const char *name) const;
 	
 private:
 	bool read_shader_file(const char *file_name, char* &shader_str) const;

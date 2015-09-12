@@ -23,6 +23,7 @@ bool GLSLProgram::create(char *vert, char* frag,
 {
 	if (vert == nullptr)
 	{
+		std::cout << "ERROR: Vertex shader required!\n";
 		return false;
 	}
 	// Vertex Shader
@@ -70,6 +71,11 @@ bool GLSLProgram::use_program() const
 {
 	glUseProgram(program);
 	return true;
+}
+
+int GLSLProgram::getUniformLocation(const char *name) const
+{
+	return glGetUniformLocation(program, name);
 }
 
 bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) const
