@@ -1,7 +1,7 @@
 #include "OGLViewer.h"
 
 OGLViewer::OGLViewer(QWidget *parent)
-	: QOpenGLWidget(parent), tcount(0), fps(30)
+	: QOpenGLWidget(parent)
 {
 	// Set surface format for current widget
 	QSurfaceFormat format;
@@ -12,17 +12,14 @@ OGLViewer::OGLViewer(QWidget *parent)
 	this->setFormat(format);
 
 	// Link timer trigger
-	process_time.start();
 	QTimer *timer = new QTimer(this);
-	/*timer->setSingleShot(false);*/
 	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 	timer->start(1);
 
 	// Window Title
-	setWindowTitle(tr("Bouncing Ball"));
+	setWindowTitle(tr("OpenGL Template"));
 
 	// Initialize transform matrix
-	matrix = setRotation(tcount * 10, 0, 0);
 	exportVBO(matrix, mtx);
 }
 
@@ -35,21 +32,6 @@ void OGLViewer::paintEvent(QPaintEvent *e)
 {
 	// Draw current frame
 	paintGL();
-	// Update status
-	movement();
-
-	char titlename[100];
-	// Time delay
-	while (1000.0 / process_time.elapsed() > fps)
-	{
-	}
-	// Update fps at window title
-	int err_s = sprintf_s(titlename, "Time Lapse: %.2ffps", 1000.0 / process_time.elapsed());
-	if (err_s)
-	{
-		setWindowTitle(tr(titlename));
-	}
-	process_time.start();
 }
 
 
@@ -63,7 +45,6 @@ void OGLViewer::initializeGL()
 	const GLubyte* version = glGetString(GL_VERSION); // version as a string
 	printf("Renderer: %s\n", renderer);
 	printf("OpenGL version supported %s\n", version);
-	//gl_log("renderer: %s\nversion: %s\n", renderer, version);
 
 	// Enable OpenGL features
 	glEnable(GL_MULTISAMPLE);
@@ -78,15 +59,12 @@ void OGLViewer::initializeGL()
 	glEnable(GL_CULL_FACE); // cull face
 	glCullFace(GL_BACK); // cull back face
 	glFrontFace(GL_CCW); // set counter-clock-wise vertex order to mean the front
-	
-
-	//////////////////////////////////////////////////////////////////////////
 
 	// Create shader files
 	shader = new GLSLProgram("vert.glsl", "frag.glsl");
 
 	// Read obj file
-	disp_geo = new Mesh("D:/Learning/OpenGL/monkey2.obj");
+	disp_geo = new Mesh("../../monkey2.obj");
 	
 	// Export vbo for shaders
 	exportVBO(disp_geo, vbo_size, verts, uvs, norms);
@@ -144,12 +122,4 @@ void OGLViewer::resizeGL(int w, int h)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-void OGLViewer::movement()
-{
-	// Change current status for render
-	tcount++;
-	matrix = setRotation(tcount * 10, 0, 0);
-	exportVBO(matrix, mtx);
 }
