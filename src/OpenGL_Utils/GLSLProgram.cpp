@@ -113,7 +113,7 @@ bool GLSLProgram::create_shader(const char *file_name, GLuint &shader, GLenum ty
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &params);
 	if (GL_TRUE != params)
 	{
-		std::cout << "ERROR: GL shader did not compile\n";
+		std::cout << "ERROR: GL shader did not compile successfully!\n";
 
 		return false;
 	}

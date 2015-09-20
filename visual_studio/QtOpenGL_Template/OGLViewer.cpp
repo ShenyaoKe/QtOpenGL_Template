@@ -69,6 +69,10 @@ void OGLViewer::initializeGL()
 	// Export vbo for shaders
 	exportVBO(disp_geo, vbo_size, verts, uvs, norms);
 
+	//
+	matrix = setRoationZ(45);
+	exportVBO(matrix, mtx);
+
 	// Get uniform variable location
 	mat_loc = shader->getUniformLocation("matrix");
 	cout << "Uniform matrix location: " << mat_loc << endl;
