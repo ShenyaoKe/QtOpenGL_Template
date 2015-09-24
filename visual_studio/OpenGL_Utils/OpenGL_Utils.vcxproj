@@ -51,6 +51,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)../tmp/$(Configuration)/</IntDir>
+    <TargetName>$(ProjectName)d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
