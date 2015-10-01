@@ -59,6 +59,7 @@ void OGLViewer::initializeGL()
 	// Enable OpenGL features
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -130,10 +131,11 @@ void OGLViewer::keyPressEvent(QKeyEvent *e)
 
 void OGLViewer::mousePressEvent(QMouseEvent *e)
 {
+	m_lastMousePos[0] = e->x();
+	m_lastMousePos[1] = e->y();
 	if ((e->buttons() == Qt::LeftButton) && (e->modifiers() == Qt::AltModifier))
 	{
-		m_lastMousePos[0] = e->x();
-		m_lastMousePos[1] = e->y();
+		// Do something here
 	}
 };
 
@@ -145,7 +147,7 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 	printf("dx: %d, dy: %d\n", dx, dy);
 	if ((e->buttons() == Qt::LeftButton) && (e->modifiers() == Qt::AltModifier))
 	{
-		view_cam->rotate(-dy / 4, dx / 4, 0);
+		view_cam->rotate(-dy * 0.25, dx * 0.25, 0.0);
 		view_cam->exportVBO(view_mat, nullptr, nullptr);
 	}
 	else if ((e->buttons() == Qt::RightButton) && (e->modifiers() == Qt::AltModifier))

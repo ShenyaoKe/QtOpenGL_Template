@@ -105,5 +105,11 @@
     <None Include="frag.glsl">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="transparent_frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="stylesheet.qss">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
