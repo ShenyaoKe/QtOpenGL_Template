@@ -37,13 +37,13 @@
     <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)..\bin\$(Configuration)\$(PlatformTarget)\</OutDir>
-    <IntDir>$(SolutionDir)..\tmp\</IntDir>
+    <OutDir>$(SolutionDir)../bin/$(Configuration)/$(PlatformTarget)/</OutDir>
+    <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)..\bin\$(Configuration)\$(PlatformTarget)\</OutDir>
-    <IntDir>$(SolutionDir)..\tmp\</IntDir>
+    <OutDir>$(SolutionDir)../bin/$(Configuration)/$(PlatformTarget)/</OutDir>
+    <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
     <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
