@@ -8,27 +8,31 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include <QTime>
+#include <QString>
+#include <QFileDialog>
+#include <QOpenGLVertexArrayObject>
 //#include <QGLFunctions>
 
 #include "OpenGL_Utils/GLSLProgram.h"
 #include "Math/MathUtil.h"
+#include "Image/ImageData.h"
 #include "Geometry/Mesh.h"
 //#include "Math/Matrix4D.h"
 #include "Camera/Camera.h"
 #include "Accel/KdTreeAccel.h"
 
-static Mesh *sphere_mesh;
-static GLfloat* sphere_verts;// vertices vbo
-static GLfloat* sphere_uvs;// Texture coordinates vbo
-static GLfloat* sphere_norms;// Normal coordinates vbo
-static int sphere_vbo_size;// Triangle face numbers
-static Matrix4D sphere_matrix;
-static GLfloat sphere_model_mat[16];
+static Mesh *model_mesh;
+static GLfloat* model_verts;// vertices vbo
+static GLfloat* model_uvs;// Texture coordinates vbo
+static GLfloat* model_norms;// Normal coordinates vbo
+static GLint* model_uids;
+static int model_vbo_size;// Triangle face numbers
 
 static Mesh *box_mesh;// Display object
 static GLfloat* box_verts;// vertices vbo
 static GLfloat* box_uvs;// Texture coordinates vbo
 static GLfloat* box_norms;// Normal coordinates vbo
+static GLint* box_idxs;
 static int box_vbo_size;// Triangle face numbers
 static GLSLProgram* shader;// OpenGL shader program
 static GLSLProgram* shader_transparent;// OpenGL shader program
@@ -40,12 +44,13 @@ static int view_mat_loc;// Uniform matrix location
 static GLfloat view_mat[16];
 static int proj_mat_loc;// Porjection matrix location
 static GLfloat proj_mat[16];
+static int sel_id_loc;
 //////////////////////////////////////////////////////////////////////////
 // Acceleration
 //////////////////////////////////////////////////////////////////////////
 static vector<Shape*> triangleList;
 static KdTreeAccel *mytree;
-
+static ImageData* img;
 //////////////////////////////////////////////////////////////////////////
 // Sphere Attribute
 //////////////////////////////////////////////////////////////////////////
@@ -58,12 +63,18 @@ class OGLViewer : public QOpenGLWidget
 {
 	Q_OBJECT
 public:
+	enum Select_Mode
+	{
+		OBJECT_SELECT,
+		COMPONENT_SELECT,
+		FACE_COMPONENT_SELECT
+	};
 	//OGLViewer();
 	OGLViewer(QWidget *parent = nullptr);
 	~OGLViewer();
 
 	//void update();
-public slots:
+	public slots:
 	void resetCamera();
 	void initParas();
 protected:
@@ -74,7 +85,12 @@ protected:
 
 	void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 	void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+	void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 	void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+private:
+	void bindBox();
+	void bindMesh();
+	void saveFrameBuffer();
 public:
 	double process_fps;
 protected:
@@ -85,8 +101,10 @@ private:
 
 	QTime process_time;
 	int m_lastMousePos[2];
-private:
+	int m_selectMode;
+private: // OpenGL variables
 	int display_mode = 0;
+	vector<GLuint> vao_handles;
 
 	friend class MainWindow;
 };
