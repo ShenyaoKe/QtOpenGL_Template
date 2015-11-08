@@ -39,8 +39,12 @@ public:
 	bool use_program() const;
 	bool unuse() const;
 
-	int getUniformLocation(const char *name) const;
+	// Uniform
+	GLuint getUniformLocation(const char *name) const;
 	void add_uniformv(const string &uniform);
+	GLuint operator ()(const string &uniform);
+
+	//GLuint operator[](const string &uniform);
 private:
 	bool read_shader_file(const char *file_name, char* &shader_str) const;
 	bool create_shader(const char *file_name, GLuint &shader, GLenum type);

@@ -26,10 +26,6 @@ OGLViewer::OGLViewer(QWidget *parent)
 
 
 	resetCamera();
-
-	// Initialize transform matrix
-	/*matrix.setIdentity();
-	matrix.exportVBO(model_mat);*/
 }
 
 OGLViewer::~OGLViewer()
@@ -180,7 +176,7 @@ void OGLViewer::paintGL()
 		shader_transparent->use_program();
 	}
 	// Apply uniform matrix
-	glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
+	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
 	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, box_vbo_size * 3);
@@ -194,7 +190,7 @@ void OGLViewer::paintGL()
 	shader->use_program();
 
 	// Apply uniform matrix
-	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, sphere_model_mat);
+	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
 	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, model_vbo_size * 3);

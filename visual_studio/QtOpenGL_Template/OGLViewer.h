@@ -37,7 +37,6 @@ static GLint* box_idxs;
 static int box_vbo_size;// Triangle face numbers
 static GLSLProgram* shader;// OpenGL shader program
 static GLSLProgram* shader_transparent;// OpenGL shader program
-//static Matrix4D matrix;// Transform matrix
 
 static int model_mat_loc;// Uniform matrix location
 static GLfloat model_mat[16];// Uniform matrix buffer

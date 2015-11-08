@@ -85,7 +85,7 @@ bool GLSLProgram::unuse() const
 	return true;
 }
 
-int GLSLProgram::getUniformLocation(const char *name) const
+GLuint GLSLProgram::getUniformLocation(const char *name) const
 {
 	return glGetUniformLocation(program, name);
 }
@@ -94,6 +94,17 @@ void GLSLProgram::add_uniformv(const string &uniform)
 {
 	uniform_locs.insert(make_pair(uniform, glGetUniformLocation(program, uniform.c_str())));
 }
+
+GLuint GLSLProgram::operator()(const string &uniform)
+{
+	return uniform_locs[uniform];
+}
+
+/*
+GLuint GLSLProgram::operator[](const string &attribute)
+{
+
+}*/
 
 bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) const
 {
