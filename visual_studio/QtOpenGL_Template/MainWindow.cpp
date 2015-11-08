@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	ui.setupUi(this);
 	ui.ogl_layout->addWidget(m_oglviewer);
-	//connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(on_actionAbout_triggered()));
-	setWindowTitle(tr("OpenGL Qt Template"));
+	//setWindowTitle(tr("OpenGL Qt Template"));
 
 	m_oglviewer->setFocusPolicy(Qt::StrongFocus);
 }
