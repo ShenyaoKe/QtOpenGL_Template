@@ -8,7 +8,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <unordered_map>
 
+using std::cout;
+using std::cin;
+using std::endl;
+
+using std::string;
+using std::unordered_map;
 /*
 const GLenum shader_type[5] = {
 	GL_VERTEX_SHADER,
@@ -28,10 +35,12 @@ public:
 
 	bool create(char *vert, char* frag = nullptr, char* geom = nullptr,
 		char* tcs = nullptr, char* tes = nullptr);
+	void del_program();
 	bool use_program() const;
+	bool unuse() const;
 
 	int getUniformLocation(const char *name) const;
-	
+	void add_uniformv(const string &uniform);
 private:
 	bool read_shader_file(const char *file_name, char* &shader_str) const;
 	bool create_shader(const char *file_name, GLuint &shader, GLenum type);
@@ -39,6 +48,7 @@ private:
 
 	GLuint shaders[5];
 	GLuint program;
+	unordered_map<string, GLuint> uniform_locs;
 };
 
 #endif // __GLSLPROGRAM__
