@@ -74,7 +74,6 @@ void OGLViewer::initializeGL()
 
 	// Create shader files
 	shader = new GLSLProgram("vert.glsl", "frag.glsl");
-	//shader_transparent = new GLSLProgram("vert.glsl", "transparent_frag.glsl");
 
 	// Export vbo for shaders
 	box_mesh->exportVBO(box_vbo_size, box_verts, box_uvs, box_norms);
@@ -281,7 +280,7 @@ void OGLViewer::paintGL()
 	// Make curent window
 	makeCurrent();
 	// Clear background and color buffer
-	glClearColor(0, 0, 0, 0);
+	glClearColor(0.6, 0.6, 0.6, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (display_mode == 0)// Wireframe
@@ -323,7 +322,7 @@ void OGLViewer::paintGL()
 	shader->use_program();
 
 	// Apply uniform matrix
-	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, sphere_model_mat);
+	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
 	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, model_vbo_size * 3);
