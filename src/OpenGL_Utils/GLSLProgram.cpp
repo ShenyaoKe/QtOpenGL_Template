@@ -23,7 +23,7 @@ bool GLSLProgram::create(char *vert, char* frag,
 {
 	if (vert == nullptr)
 	{
-		std::cout << "ERROR: Vertex shader required!\n";
+		cout << "ERROR: Vertex shader required!\n";
 		return false;
 	}
 	// Vertex Shader
@@ -67,16 +67,44 @@ bool GLSLProgram::create(char *vert, char* frag,
 	return true;
 }
 
+void GLSLProgram::del_program()
+{
+	glDeleteProgram(program);
+	program = -1;
+}
+
 bool GLSLProgram::use_program() const
 {
 	glUseProgram(program);
 	return true;
 }
 
-int GLSLProgram::getUniformLocation(const char *name) const
+bool GLSLProgram::unuse() const
+{
+	glUseProgram(0);
+	return true;
+}
+
+GLuint GLSLProgram::getUniformLocation(const char *name) const
 {
 	return glGetUniformLocation(program, name);
 }
+
+void GLSLProgram::add_uniformv(const string &uniform)
+{
+	uniform_locs.insert(make_pair(uniform, glGetUniformLocation(program, uniform.c_str())));
+}
+
+GLuint GLSLProgram::operator()(const string &uniform)
+{
+	return uniform_locs[uniform];
+}
+
+/*
+GLuint GLSLProgram::operator[](const string &attribute)
+{
+
+}*/
 
 bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) const
 {
@@ -84,14 +112,14 @@ bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) con
 	std::ifstream shader_file(file_name);
 	if (!shader_file.is_open())
 	{
-		std::cout << "ERROR: Cannot open shader file " << file_name << std::endl;
+		cout << "ERROR: Cannot open shader file " << file_name << endl;
 		return false;
 	}
-	std::string contents((std::istreambuf_iterator<char>(shader_file)),
+	string contents((std::istreambuf_iterator<char>(shader_file)),
 		std::istreambuf_iterator<char>());
 	if (!contents.size())
 	{
-		std::cout << "ERROR: The shader file contains nothing in " << file_name << std::endl;
+		cout << "ERROR: The shader file contains nothing in " << file_name << endl;
 		return false;
 	}
 	delete shader_str;
@@ -111,10 +139,21 @@ bool GLSLProgram::create_shader(const char *file_name, GLuint &shader, GLenum ty
 	glCompileShader(shader);
 	int params = -1;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &params);
-	if (GL_TRUE != params)
+	if (params == GL_FALSE)
 	{
-		std::cout << "ERROR: GL shader " << file_name << " did not compile successfully!\n";
+		cout << "ERROR: GL shader " << file_name << " did not compile successfully!\n";
 
+#ifdef _DEBUG
+		GLint infoLogLength;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+		GLchar *infoLog = new GLchar[infoLogLength];
+		glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog);
+		cout	<< "*************************************************************\n"
+				<< "*                       Link log                            *\n"
+				<< infoLog
+				<< "*************************************************************\n";
+		delete[] infoLog;
+#endif
 		return false;
 	}
 	return true;
@@ -135,10 +174,21 @@ bool GLSLProgram::create_program()
 
 	GLint params = -1;
 	glGetProgramiv(program, GL_LINK_STATUS, &params);
-	if (GL_TRUE != params)
+	if (params == GL_FALSE)
 	{
-		std::cout<<"ERROR: could not link shader programme GL index %u\n";
+		cout<<"ERROR: could not link shader programme GL index %u\n";
 		
+#ifdef _DEBUG
+		GLint infoLogLength;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+		GLchar *infoLog = new GLchar[infoLogLength];
+		glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
+		cout	<< "*************************************************************\n"
+				<< "*                       Link log                            *\n"
+				<< infoLog
+				<< "*************************************************************\n";
+		delete[] infoLog;
+#endif
 		return false;
 	}
 	return true;

@@ -3,6 +3,7 @@
 #define __OGLVIEWER__
 
 #include "GL/glew.h"
+#include "common.h"
 
 #include <QOpenGLWidget>
 #include <QKeyEvent>
@@ -35,7 +36,6 @@ static GLfloat* box_norms;// Normal coordinates vbo
 static GLint* box_idxs;
 static int box_vbo_size;// Triangle face numbers
 static GLSLProgram* shader;// OpenGL shader program
-static Matrix4D matrix;// Transform matrix
 
 static int model_mat_loc;// Uniform matrix location
 static GLfloat model_mat[16];// Uniform matrix buffer
@@ -68,7 +68,6 @@ public:
 		COMPONENT_SELECT,
 		FACE_COMPONENT_SELECT
 	};
-	//OGLViewer();
 	OGLViewer(QWidget *parent = nullptr);
 	~OGLViewer();
 
