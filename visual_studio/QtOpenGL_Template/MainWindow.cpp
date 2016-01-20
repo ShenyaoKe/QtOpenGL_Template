@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+	delete m_oglviewer;
 }
 
 void MainWindow::on_actionAbout_triggered()

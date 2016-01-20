@@ -8,8 +8,9 @@ OGLViewer::OGLViewer(QWidget *parent)
 	QSurfaceFormat format;
 	format.setDepthBufferSize(32);
 	format.setStencilBufferSize(8);
+	//format.setSamples(16);
 	format.setVersion(4, 5);
-	format.setProfile(QSurfaceFormat::CoreProfile);
+	//format.setProfile(QSurfaceFormat::CoreProfile);
 	this->setFormat(format);
 
 	// Link timer trigger
@@ -47,7 +48,8 @@ void OGLViewer::initializeGL()
 
 	// Enable OpenGL features
 	glEnable(GL_MULTISAMPLE);
-	glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_POLYGON_SMOOTH);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glBlendEquation(GL_FUNC_ADD);
