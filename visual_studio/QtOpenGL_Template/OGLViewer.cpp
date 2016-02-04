@@ -311,8 +311,8 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	Transform cam2w = lookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0));
-	Transform pers = Transform(setPerspective(67,
+	Transform cam2w = Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0));
+	Transform pers = Transform(Matrix4D::Perspective(67,
 		width() / static_cast<double>(height()), 0.1, 100));
 	view_cam = new perspCamera(cam2w, pers);
 	view_cam->exportVBO(view_mat, proj_mat, nullptr);
@@ -327,5 +327,5 @@ void OGLViewer::saveFrameBuffer()
 {
 	QString filename = QFileDialog::getSaveFileName(
 		this, "Save Screenshot file...", "default", tr("PNG(*.png)"));
-	this->grab().save("../../scene/texture/framebuffer.png");
+	this->grab().save(filename);
 }
