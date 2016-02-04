@@ -272,7 +272,7 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 	int dx = e->x() - m_lastMousePos[0];
 	int dy = e->y() - m_lastMousePos[1];
 
-	printf("dx: %d, dy: %d\n", dx, dy);
+	//printf("dx: %d, dy: %d\n", dx, dy);
 
 	if ((e->buttons() == Qt::LeftButton) && (e->modifiers() == Qt::AltModifier))
 	{
