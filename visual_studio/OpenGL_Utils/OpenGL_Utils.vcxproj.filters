@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\src\OpenGL_Utils\ogl_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglVAO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\OpenGL_Utils\ogl_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglVAO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

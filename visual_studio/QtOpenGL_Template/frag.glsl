@@ -15,21 +15,28 @@ out vec4 frag_color; // final colour of surface
 
 void main()
 {
-	//frag_color = vec4(uid_fs * 0.05, 0., 0, 1.0);
-	// ambient intensity
-	//vec3 Kd = texture(modelTex, TexCoord).xyz * 1.2;
-	// diffuse intensity
-	// raise light position to eye space
-	vec3 light_position_eye = light_position_world;// vec3(view_matrix * vec4(light_position_world, 1.0));
-	vec3 distance_to_light_eye = light_position_eye - position_eye;
-	vec3 direction_to_light_eye = normalize(distance_to_light_eye);
-	float dot_prod = dot(direction_to_light_eye, normal_eye);
-	dot_prod = (dot_prod + 1.0) / 2.0;
-	//dot_prod = max(dot_prod, 0.0);
-	//dot_prod = ((dot_prod + 1.0) / 2);
-	vec3 Id = mix(La, Kd, dot_prod); // final diffuse intensity
+	if (gl_FrontFacing)
+	{
+		//frag_color = vec4(uid_fs * 0.05, 0., 0, 1.0);
+		// ambient intensity
+		//vec3 Kd = texture(modelTex, TexCoord).xyz * 1.2;
+		// diffuse intensity
+		// raise light position to eye space
+		vec3 light_position_eye = light_position_world;// vec3(view_matrix * vec4(light_position_world, 1.0));
+		vec3 distance_to_light_eye = light_position_eye - position_eye;
+		vec3 direction_to_light_eye = normalize(distance_to_light_eye);
+		float dot_prod = dot(direction_to_light_eye, normal_eye);
+		dot_prod = (dot_prod + 1.0) / 2.0;
+		//dot_prod = max(dot_prod, 0.0);
+		//dot_prod = ((dot_prod + 1.0) / 2);
+		vec3 Id = mix(La, Kd, dot_prod); // final diffuse intensity
 
-	// final colour
-	frag_color = vec4(Id, 1.0);
+		// final colour
+		frag_color = vec4(Id, 1.0);
+	}
+	else
+	{
+		frag_color = vec4(0, 0, 1, 1.0);
+	}
 }
 
