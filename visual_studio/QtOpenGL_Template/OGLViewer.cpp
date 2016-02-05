@@ -3,6 +3,9 @@
 OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), tcount(0), fps(30)
 	, m_selectMode(OBJECT_SELECT)
+	/*, view_cam(new perspCamera(
+		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
+		width() / static_cast<double>(height())))*/
 {
 	// Set surface format for current widget
 	QSurfaceFormat format;
@@ -25,8 +28,8 @@ OGLViewer::OGLViewer(QWidget *parent)
 	box_mesh = new Mesh("../../scene/obj/cube_large.obj");
 	model_mesh = new Mesh("../../scene/obj/monkey.obj");
 
-
-	resetCamera();
+	view_cam->exportVBO(view_mat, proj_mat, nullptr);
+	//resetCamera();
 }
 
 OGLViewer::~OGLViewer()
@@ -183,6 +186,7 @@ void OGLViewer::paintGL()
 	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
 	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, model_verts.size() / 3);
+	glBindVertexArray(0);
 }
 // Redraw function
 void OGLViewer::paintEvent(QPaintEvent *e)
@@ -194,9 +198,9 @@ void OGLViewer::paintEvent(QPaintEvent *e)
 void OGLViewer::resizeGL(int w, int h)
 {
 	// Widget resize operations
-	view_cam->resizeViewport(width() / static_cast<double>(height()));
+	/*view_cam->resizeViewport(width() / static_cast<double>(height()));
 	view_cam->setResolution(width(), height());
-	view_cam->exportVBO(nullptr, proj_mat, nullptr);
+	view_cam->exportVBO(nullptr, proj_mat, nullptr);*/
 }
 /************************************************************************/
 /* Qt User Operation Functions                                          */
@@ -311,11 +315,16 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	Transform cam2w = Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0));
-	Transform pers = Transform(Matrix4D::Perspective(67,
-		width() / static_cast<double>(height()), 0.1, 100));
-	view_cam = new perspCamera(cam2w, pers);
-	view_cam->exportVBO(view_mat, proj_mat, nullptr);
+	delete view_cam;
+	//Matrix4D cam2w = Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0));
+
+	//view_cam->setCamToWorld(Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0)));
+	//Transform pers = Transform(Matrix4D::Perspective(67,
+	//	width() / static_cast<double>(height()), 0.1, 100));
+	view_cam = new perspCamera(
+		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
+		width() / static_cast<double>(height()));
+	//view_cam->exportVBO(view_mat, proj_mat, nullptr);
 	//update();
 }
 void OGLViewer::initParas()
