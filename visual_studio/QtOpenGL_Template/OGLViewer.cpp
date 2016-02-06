@@ -1,11 +1,13 @@
 #include "OGLViewer.h"
+#include <QMatrix4x4>
 
 OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), tcount(0), fps(30)
 	, m_selectMode(OBJECT_SELECT)
-	/*, view_cam(new perspCamera(
+	, view_cam(new perspCamera(
 		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
-		width() / static_cast<double>(height())))*/
+		width() / static_cast<double>(height())))
+	, box_mesh(nullptr), model_mesh(nullptr)
 {
 	// Set surface format for current widget
 	QSurfaceFormat format;
@@ -17,25 +19,38 @@ OGLViewer::OGLViewer(QWidget *parent)
 	this->setFormat(format);
 
 	// Link timer trigger
-	process_time.start();
+	/*process_time.start();
 	QTimer *timer = new QTimer(this);
-	/*timer->setSingleShot(false);*/
+	//timer->setSingleShot(false);
 	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-	timer->start(0);
-
+	timer->start(0);*/
 
 	// Read obj file
 	box_mesh = new Mesh("../../scene/obj/cube_large.obj");
 	model_mesh = new Mesh("../../scene/obj/monkey.obj");
 
 	view_cam->exportVBO(view_mat, proj_mat, nullptr);
+	/*proj = Matrix4D::Perspective(60, width() / static_cast<float>(height()), 0.1, 100);
+	//proj.printInfo("Default perspective matrix");
+	view = Matrix4D::LookAt(Point3D(3, 1, 3), Point3D(0, 0, 0));
+	view.printInfo("Default LookAt matrix");
+	view = view.Inverse();
+	view.exportVBO(view_mat);
+	proj.exportVBO(proj_mat);*/
+	//QMatrix4x4 qproj;
+	//qproj.perspective(60, 1, 0.1, 100);
+	//qproj.inverted();
 	//resetCamera();
 }
 
 OGLViewer::~OGLViewer()
 {
 	delete box_mesh;
+	box_mesh = nullptr;
 	delete model_mesh;
+	model_mesh = nullptr;
+	delete model_shader;
+	model_shader = nullptr;
 }
 /************************************************************************/
 /* OpenGL Rendering Modules                                             */
@@ -63,7 +78,7 @@ void OGLViewer::initializeGL()
 	//////////////////////////////////////////////////////////////////////////
 
 	// Create shader files
-	shader = new GLSLProgram("vert.glsl", "frag.glsl");
+	model_shader = new GLSLProgram("vert.glsl", "frag.glsl");
 
 	// Export vbo for shaders
 	box_mesh->exportVBO(&box_verts, &box_uvs, &box_norms);
@@ -73,9 +88,9 @@ void OGLViewer::initializeGL()
 	bindMesh();
 
 	// Get uniform variable location
-	model_mat_loc = shader->getUniformLocation("model_matrix");
-	view_mat_loc = shader->getUniformLocation("view_matrix");
-	proj_mat_loc = shader->getUniformLocation("proj_matrix");; // WorldToCamera matrix
+	model_mat_loc = model_shader->getUniformLocation("model_matrix");
+	view_mat_loc = model_shader->getUniformLocation("view_matrix");
+	proj_mat_loc = model_shader->getUniformLocation("proj_matrix");; // WorldToCamera matrix
 }
 
 void OGLViewer::bindBox()
@@ -164,7 +179,7 @@ void OGLViewer::paintGL()
 	// Bind Box VAOs
 	glBindVertexArray(box_vao);
 	// Use shader program
-	shader->use_program();
+	model_shader->use_program();
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
 	vector<GLfloat> projmatvec(proj_mat, proj_mat + 16);
@@ -179,7 +194,7 @@ void OGLViewer::paintGL()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glBindVertexArray(model_vao);
-	shader->use_program();
+	model_shader->use_program();
 
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
@@ -198,9 +213,9 @@ void OGLViewer::paintEvent(QPaintEvent *e)
 void OGLViewer::resizeGL(int w, int h)
 {
 	// Widget resize operations
-	/*view_cam->resizeViewport(width() / static_cast<double>(height()));
-	view_cam->setResolution(width(), height());
-	view_cam->exportVBO(nullptr, proj_mat, nullptr);*/
+	view_cam->resizeViewport(width() / static_cast<double>(height()));
+	//view_cam->setResolution(width(), height());
+	view_cam->exportVBO(nullptr, proj_mat, nullptr);
 }
 /************************************************************************/
 /* Qt User Operation Functions                                          */

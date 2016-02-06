@@ -68,6 +68,7 @@ public:
 	double process_fps;
 protected:
 	perspCamera *view_cam;
+	Matrix4D proj, view;
 private:
 	int fps;
 	int tcount;
@@ -90,7 +91,9 @@ private: // OpenGL variables
 	vector<GLfloat> model_norms;// Normal coordinates vbo
 	GLuint model_vert_vbo, model_norm_vbo, model_uv_vbo, model_vao;
 
-	GLSLProgram* shader;// OpenGL shader program
+	vector<GLfloat> filmgate, resgate;
+
+	GLSLProgram* model_shader;// OpenGL shader program
 
 	friend class MainWindow;
 };
