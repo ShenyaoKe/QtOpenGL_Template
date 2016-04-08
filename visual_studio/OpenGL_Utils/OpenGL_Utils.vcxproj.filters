@@ -27,6 +27,12 @@
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVAO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglFBO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglPrimitive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h">
@@ -39,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVAO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglFBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglPrimitive.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

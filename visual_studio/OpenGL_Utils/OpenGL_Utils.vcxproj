@@ -12,12 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\OpenGL_Utils\GLSLProgram.cpp" />
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglFBO.cpp" />
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglPrimitive.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVBO.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\ogl_utils.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h" />
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglFBO.h" />
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglPrimitive.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVBO.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\ogl_utils.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVAO.h" />
@@ -54,10 +58,12 @@
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../include/</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../include/</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
