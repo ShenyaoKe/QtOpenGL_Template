@@ -1,21 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtOpenGL_Template", "QtOpenGL_Template\QtOpenGL_Template.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Utils", "OpenGL_Utils\OpenGL_Utils.vcxproj", "{95874169-3159-442D-BD3A-8D223BBEC7CE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kaguya", "..\..\Kaguya\vs2013\Kaguya.vcxproj", "{E26467AF-7A85-484E-A54D-0488CA2D9F07}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtOpenGL_QML", "QtOpenGL_QML\QtOpenGL_QML.vcxproj", "{DA964BDF-9E63-43BC-A010-94C2D1DB0819}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "openglunderqml", "OpenGL_QML\openglunderqml.vcxproj", "{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Quads", "Quads\Quads.vcxproj", "{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Framebuffer", "Framebuffer\Framebuffer.vcxproj", "{9195071D-D47E-4198-ABF2-0082DE5E37FD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kaguya", "..\..\Kaguya\vs2015\Kaguya.vcxproj", "{E26467AF-7A85-484E-A54D-0488CA2D9F07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,26 +33,6 @@ Global
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x64.ActiveCfg = Release|x64
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x64.Build.0 = Release|x64
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x86.ActiveCfg = Release|x64
-		{DA964BDF-9E63-43BC-A010-94C2D1DB0819}.Debug|x64.ActiveCfg = Debug|x64
-		{DA964BDF-9E63-43BC-A010-94C2D1DB0819}.Debug|x86.ActiveCfg = Debug|x64
-		{DA964BDF-9E63-43BC-A010-94C2D1DB0819}.Release|x64.ActiveCfg = Release|x64
-		{DA964BDF-9E63-43BC-A010-94C2D1DB0819}.Release|x64.Build.0 = Release|x64
-		{DA964BDF-9E63-43BC-A010-94C2D1DB0819}.Release|x86.ActiveCfg = Release|x64
-		{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}.Debug|x64.ActiveCfg = Debug|x64
-		{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}.Debug|x86.ActiveCfg = Debug|x64
-		{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}.Release|x64.ActiveCfg = Release|x64
-		{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}.Release|x64.Build.0 = Release|x64
-		{06BC69D6-8473-3CF9-81F7-AD3C8AB49E47}.Release|x86.ActiveCfg = Release|x64
-		{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}.Debug|x64.ActiveCfg = Debug|x64
-		{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}.Debug|x86.ActiveCfg = Debug|x64
-		{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}.Release|x64.ActiveCfg = Release|x64
-		{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}.Release|x64.Build.0 = Release|x64
-		{267F18D7-4CC1-45E3-8DB6-DD43F0997EF4}.Release|x86.ActiveCfg = Release|x64
-		{9195071D-D47E-4198-ABF2-0082DE5E37FD}.Debug|x64.ActiveCfg = Debug|x64
-		{9195071D-D47E-4198-ABF2-0082DE5E37FD}.Debug|x86.ActiveCfg = Debug|x64
-		{9195071D-D47E-4198-ABF2-0082DE5E37FD}.Release|x64.ActiveCfg = Release|x64
-		{9195071D-D47E-4198-ABF2-0082DE5E37FD}.Release|x64.Build.0 = Release|x64
-		{9195071D-D47E-4198-ABF2-0082DE5E37FD}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

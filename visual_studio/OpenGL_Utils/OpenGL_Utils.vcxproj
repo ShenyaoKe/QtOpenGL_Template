@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -12,12 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\OpenGL_Utils\GLSLProgram.cpp" />
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglFBO.cpp" />
+    <ClCompile Include="..\..\src\OpenGL_Utils\oglPrimitive.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVBO.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\ogl_utils.cpp" />
     <ClCompile Include="..\..\src\OpenGL_Utils\oglVAO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\OpenGL_Utils\GLSLProgram.h" />
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglFBO.h" />
+    <ClInclude Include="..\..\src\OpenGL_Utils\oglPrimitive.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVBO.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\ogl_utils.h" />
     <ClInclude Include="..\..\src\OpenGL_Utils\oglVAO.h" />
@@ -30,13 +34,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -54,10 +58,12 @@
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
     <TargetName>$(ProjectName)d</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../include/</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)../lib/$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)../tmp/$(Configuration)/$(ProjectName)/</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../include/</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

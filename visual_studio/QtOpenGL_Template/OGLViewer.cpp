@@ -312,7 +312,7 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 	{
 		if (dx != e->x() && dy != e->y())
 		{
-			view_cam->zoom(dx * 0.05, dy * 0.05, 0.0);
+			view_cam->zoom(-dx * 0.05, dy * 0.05, 0.0);
 			view_cam->exportVBO(view_mat, nullptr, nullptr);
 			update();
 		}
