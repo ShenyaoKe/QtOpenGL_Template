@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 using std::cout;
@@ -15,6 +16,7 @@ using std::cin;
 using std::endl;
 
 using std::string;
+using std::vector;
 using std::unordered_map;
 /*
 const GLenum shader_type[5] = {
@@ -28,9 +30,9 @@ const GLenum shader_type[5] = {
 class GLSLProgram
 {
 public:
-	GLSLProgram();
-	GLSLProgram(char *vert, char* frag = nullptr, char* geom = nullptr,
-		char* tcs = nullptr, char* tes = nullptr);
+	//GLSLProgram();
+	explicit GLSLProgram(char *vert, char* frag = nullptr,
+		char* geom = nullptr, char* tcs = nullptr, char* tes = nullptr);
 	~GLSLProgram();
 
 	bool create(char *vert, char* frag = nullptr, char* geom = nullptr,
@@ -50,7 +52,7 @@ private:
 	bool create_shader(const char *file_name, GLuint &shader, GLenum type);
 	bool create_program();
 
-	GLuint shaders[5];
+	vector<GLuint> shaders;
 	GLuint program;
 	unordered_map<string, GLuint> uniform_locs;
 };

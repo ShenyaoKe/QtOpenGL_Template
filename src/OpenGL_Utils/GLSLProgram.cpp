@@ -1,20 +1,26 @@
 #include "GLSLProgram.h"
 
 
+/*
 GLSLProgram::GLSLProgram()
-	: program(0), shaders()
+	: program(0), shaders(5, 0)
 {
-}
+}*/
 
 
 GLSLProgram::GLSLProgram(char *vert, char* frag,
-	char* geom, char* tcs, char* tes) : program(0), shaders()
+	char* geom, char* tcs, char* tes) : program(0), shaders(5, 0)
 {
 	create(vert, frag, geom, tcs, tes);
 }
 
 GLSLProgram::~GLSLProgram()
 {
+	for (auto shader : shaders)
+	{
+		glDeleteShader(shader);
+	}
+	glDeleteProgram(program);
 	//delete[]shaders;
 }
 
