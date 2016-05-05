@@ -1,10 +1,11 @@
 #include "GLSLProgram.h"
 
 
+/*
 GLSLProgram::GLSLProgram()
-	: program(0), shaders()
+	: program(0), shaders(5, 0)
 {
-}
+}*/
 
 
 GLSLProgram::GLSLProgram(const char *vert, const char* frag,
@@ -16,6 +17,11 @@ GLSLProgram::GLSLProgram(const char *vert, const char* frag,
 
 GLSLProgram::~GLSLProgram()
 {
+	for (auto shader : shaders)
+	{
+		glDeleteShader(shader);
+	}
+	glDeleteProgram(program);
 	//delete[]shaders;
 }
 
