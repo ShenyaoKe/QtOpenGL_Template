@@ -8,8 +8,9 @@ GLSLProgram::GLSLProgram()
 }*/
 
 
-GLSLProgram::GLSLProgram(char *vert, char* frag,
-	char* geom, char* tcs, char* tes) : program(0), shaders(5, 0)
+GLSLProgram::GLSLProgram(const char *vert, const char* frag,
+	const char* geom, const char* tcs, const char* tes)
+	: program(0), shaders()
 {
 	create(vert, frag, geom, tcs, tes);
 }
@@ -24,8 +25,8 @@ GLSLProgram::~GLSLProgram()
 	//delete[]shaders;
 }
 
-bool GLSLProgram::create(char *vert, char* frag,
-	char* geom, char* tcs, char* tes)
+bool GLSLProgram::create(const char *vert, const char* frag,
+	const char* geom, const char* tcs, const char* tes)
 {
 	if (vert == nullptr)
 	{
@@ -106,11 +107,29 @@ GLuint GLSLProgram::operator()(const string &uniform)
 	return uniform_locs[uniform];
 }
 
-/*
+GLuint GLSLProgram::get(GLenum type)
+{
+	switch (type)
+	{
+	case GL_VERTEX_SHADER:
+		return shaders[0];
+	case GL_FRAGMENT_SHADER:
+		return shaders[1];
+	case GL_GEOMETRY_SHADER:
+		return shaders[2];
+	case GL_TESS_CONTROL_SHADER:
+		return shaders[3];
+	case GL_TESS_EVALUATION_SHADER:
+		return shaders[4];
+	default:
+		return program;
+	}
+}
+
 GLuint GLSLProgram::operator[](const string &attribute)
 {
-
-}*/
+	return glGetUniformLocation(program, attribute.c_str());
+}
 
 bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) const
 {

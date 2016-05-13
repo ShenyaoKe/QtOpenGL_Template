@@ -170,9 +170,11 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
     </CustomBuild>
-    <None Include="frag.glsl" />
+    <None Include="mesh_fs.glsl" />
+    <None Include="post_fs.glsl" />
+    <None Include="post_vs.glsl" />
     <None Include="stylesheet.qss" />
-    <None Include="vert.glsl" />
+    <None Include="mesh_vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
