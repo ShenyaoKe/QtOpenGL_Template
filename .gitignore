@@ -197,3 +197,5 @@ FakesAssemblies/
 *.opt
 /tmp
 GeneratedFiles
+/include/OpenGL_Utils
+/include/Kaguya

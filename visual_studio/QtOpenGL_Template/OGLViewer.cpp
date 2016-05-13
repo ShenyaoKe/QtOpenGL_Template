@@ -9,13 +9,15 @@ OGLViewer::OGLViewer(QWidget *parent)
 		width() / static_cast<double>(height())))
 	, box_mesh(nullptr), model_mesh(nullptr)
 {
+	auto ctx = this->context();
+	cout << "default fbo:\t" << defaultFramebufferObject() << endl;
 	// Set surface format for current widget
 	QSurfaceFormat format;
 	format.setDepthBufferSize(32);
 	format.setStencilBufferSize(8);
-	//format.setSamples(16);
+	format.setSamples(4);
 	format.setVersion(4, 5);
-	//format.setProfile(QSurfaceFormat::CoreProfile);
+	format.setProfile(QSurfaceFormat::CoreProfile);
 	this->setFormat(format);
 
 	// Link timer trigger
@@ -59,7 +61,6 @@ void OGLViewer::initializeGL()
 {
 	// OpenGL extention initialization
 	glewInit();
-
 	// Print OpenGL vertion
 	cout << "Renderer: " << glGetString(GL_RENDERER) << endl;
 	cout << "OpenGL version supported " << glGetString(GL_VERSION) << endl;
@@ -161,6 +162,8 @@ void OGLViewer::paintGL()
 {
 	// Make curent window
 	makeCurrent();
+
+	glDisable(GL_MULTISAMPLE);
 	// Clear background and color buffer
 	glClearColor(0.6, 0.6, 0.6, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -204,11 +207,7 @@ void OGLViewer::paintGL()
 	glBindVertexArray(0);
 }
 // Redraw function
-void OGLViewer::paintEvent(QPaintEvent *e)
-{
-	// Draw current frame
-	paintGL();
-}
+
 // Resize function
 void OGLViewer::resizeGL(int w, int h)
 {
