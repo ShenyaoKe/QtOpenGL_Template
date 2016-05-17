@@ -1,6 +1,6 @@
 #include "oglFBO.h"
 
-
+GLuint oglFBO::defaultFrameBuffer = 0;
 
 oglFBO::oglFBO()
 {
@@ -11,35 +11,30 @@ oglFBO::~oglFBO()
 {
 }
 
-void oglFBO::resize(int32_t w, int32_t h)
-{
-	width = w;
-	height = h;
-}
-
-bool oglFBO::init()
+bool oglFBO::create(int32_t width, int32_t height, GLenum attachment,
+	GLenum target, GLenum internalFormat)
 {
 	glGenFramebuffers(1, &fb);
 	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glBindTexture(target, tex);
+	glTexImage2D(target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Attach texture to framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, fb);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target, tex, 0);
 
 	// Create a renderbuffer, which allows depth-testing in framebuffer
 	glGenRenderbuffers(1, &rb);
 	glBindRenderbuffer(GL_RENDERBUFFER, rb);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 	// Attach renderbuffer to framebuffer
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rb);
-
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, rb);
+	
 	GLenum draw_bufs[] = { GL_COLOR_ATTACHMENT0 };
 	glDrawBuffers(1, draw_bufs);
 
@@ -78,7 +73,7 @@ bool oglFBO::init()
 		return false;
 	}
 	// Unbind FBO
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameBuffer);
 	return true;
 }
 
@@ -87,12 +82,37 @@ void oglFBO::bind()
 	glBindFramebuffer(GL_FRAMEBUFFER, fb);
 }
 
-void oglFBO::unbind()
+void oglFBO::unbind(GLuint default_fbo)
 {
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, default_fbo);
 }
 
 void oglFBO::bindTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, tex);
+}
+
+GLuint oglFBO::texture() const
+{
+	return tex;
+}
+
+bool oglFBO::setDefault(GLint fbo)
+{
+	if (fbo < 0)
+	{
+		return false;
+	}
+	defaultFrameBuffer = fbo;
+	return true;
+}
+
+bool oglFBO::bindDefault()
+{
+	if (defaultFrameBuffer < 0)
+	{
+		return false;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, defaultFrameBuffer);
+	return true;
 }

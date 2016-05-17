@@ -11,13 +11,18 @@ public:
 	oglFBO();
 	~oglFBO();
 
-	void resize(int32_t w, int32_t h);
-	bool init();
+	bool create(int32_t width, int32_t height, GLenum attachment,
+		GLenum target = GL_TEXTURE_2D, GLenum internalFormat = 0);
 	void bind();
-	void unbind();
+	void unbind(GLuint default_fbo = 0);
 	void bindTexture();
-public:
-	int32_t width, height;
-	GLuint fb, tex, rb;
-};
 
+	GLuint texture() const;
+
+	static bool setDefault(GLint fbo);
+	static bool bindDefault();
+private:
+	GLuint fb, tex, rb;
+
+	static GLuint defaultFrameBuffer;
+};
