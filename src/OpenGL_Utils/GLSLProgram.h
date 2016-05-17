@@ -18,25 +18,20 @@ using std::endl;
 using std::string;
 using std::vector;
 using std::unordered_map;
-/*
-const GLenum shader_type[5] = {
-	GL_VERTEX_SHADER,
-	GL_FRAGMENT_SHADER,
-	GL_GEOMETRY_SHADER,
-	GL_TESS_CONTROL_SHADER,
-	GL_TESS_EVALUATION_SHADER
-};*/
 
 class GLSLProgram
 {
 public:
 	//GLSLProgram();
-	explicit GLSLProgram(char *vert, char* frag = nullptr,
-		char* geom = nullptr, char* tcs = nullptr, char* tes = nullptr);
+	GLSLProgram(
+		const char *vert, const char* frag = nullptr,
+		const char* geom = nullptr,
+		const char* tcs = nullptr, const char* tes = nullptr);
 	~GLSLProgram();
 
-	bool create(char *vert, char* frag = nullptr, char* geom = nullptr,
-		char* tcs = nullptr, char* tes = nullptr);
+	bool create(const char *vert, const char* frag = nullptr,
+		const char* geom = nullptr,
+		const char* tcs = nullptr, const char* tes = nullptr);
 	void del_program();
 	bool use_program() const;
 	bool unuse() const;
@@ -45,6 +40,8 @@ public:
 	GLuint getUniformLocation(const char *name) const;
 	void add_uniformv(const string &uniform);
 	GLuint operator ()(const string &uniform);
+	GLuint operator [](const string &uniform);
+	GLuint get(GLenum type = 0);
 
 	//GLuint operator[](const string &uniform);
 private:
@@ -52,7 +49,7 @@ private:
 	bool create_shader(const char *file_name, GLuint &shader, GLenum type);
 	bool create_program();
 
-	vector<GLuint> shaders;
+	GLuint shaders[5];
 	GLuint program;
 	unordered_map<string, GLuint> uniform_locs;
 };
