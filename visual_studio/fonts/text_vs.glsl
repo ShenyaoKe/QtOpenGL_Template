@@ -1,7 +1,7 @@
 #version 410
 
 // vertex positions input attribute
-in layout(location = 0) vec2 vp;
+layout(location = 0) in vec2 vp;
 
 // texture coordinates to be interpolated to fragment shaders
 out vec2 st;
