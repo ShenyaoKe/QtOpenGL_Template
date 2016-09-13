@@ -18,15 +18,15 @@
 
 #include "Math/MathUtil.h"
 #include "Image/ImageData.h"
-#include "Geometry/Mesh.h"
+#include "Geometry/TriangleMesh.h"
 //#include "Math/Matrix4D.h"
 #include "Camera/perspCamera.h"
 
-static int model_mat_loc;// Uniform matrix location
+//static int model_mat_loc;// Uniform matrix location
 static GLfloat model_mat[16];// Uniform matrix buffer
-static int view_mat_loc;// Uniform matrix location
+//static int view_mat_loc;// Uniform matrix location
 static GLfloat view_mat[16];
-static int proj_mat_loc;// Porjection matrix location
+//static int proj_mat_loc;// Porjection matrix location
 static GLfloat proj_mat[16];
 
 const double eps = 5e-4;
@@ -66,8 +66,8 @@ private:
 public:
 	double process_fps;
 protected:
-	perspCamera *view_cam;
-	Matrix4D proj, view;
+	unique_ptr<perspCamera> view_cam;
+	Matrix4x4 proj, view;
 private:
 	int fps;
 	int tcount;
@@ -78,13 +78,13 @@ private:
 private: // OpenGL variables
 	int display_mode = 0;
 
-	Mesh *box_mesh;// Display object
+	unique_ptr<TriangleMesh> box_mesh;// Display object
 	vector<GLfloat> box_verts;// vertices vbo
 	vector<GLfloat> box_uvs;// Texture coordinates vbo
 	vector<GLfloat> box_norms;// Normal coordinates vbo
 	GLuint box_vert_vbo, box_norm_vbo, box_vao;
 
-	Mesh *model_mesh;
+	unique_ptr<TriangleMesh> model_mesh;
 	vector<GLfloat> model_verts;// vertices vbo
 	vector<GLfloat> model_uvs;// Texture coordinates vbo
 	vector<GLfloat> model_norms;// Normal coordinates vbo
@@ -92,7 +92,7 @@ private: // OpenGL variables
 
 	vector<GLfloat> filmgate, resgate;
 
-	GLSLProgram* model_shader;// OpenGL shader program
+	unique_ptr<GLSLProgram> model_shader;// OpenGL shader program
 
 	friend class MainWindow;
 };

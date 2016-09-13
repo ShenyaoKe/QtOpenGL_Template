@@ -5,9 +5,10 @@ OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), tcount(0), fps(30)
 	, m_selectMode(OBJECT_SELECT)
 	, view_cam(new perspCamera(
-		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
+		Point3f(10, 6, 10), Point3f(0.0, 0.0, 0.0), Vector3f(0, 1, 0),
 		width() / static_cast<double>(height())))
-	, box_mesh(nullptr), model_mesh(nullptr)
+	, box_mesh(new TriangleMesh("../../scene/obj/cube_large.obj"))
+	, model_mesh(new TriangleMesh("../../scene/obj/monkey.obj"))
 {
 	auto ctx = this->context();
 	cout << "default fbo:\t" << defaultFramebufferObject() << endl;
@@ -28,31 +29,12 @@ OGLViewer::OGLViewer(QWidget *parent)
 	timer->start(0);*/
 
 	// Read obj file
-	box_mesh = new Mesh("../../scene/obj/cube_large.obj");
-	model_mesh = new Mesh("../../scene/obj/monkey.obj");
 
 	view_cam->exportVBO(view_mat, proj_mat, nullptr);
-	/*proj = Matrix4D::Perspective(60, width() / static_cast<float>(height()), 0.1, 100);
-	//proj.printInfo("Default perspective matrix");
-	view = Matrix4D::LookAt(Point3D(3, 1, 3), Point3D(0, 0, 0));
-	view.printInfo("Default LookAt matrix");
-	view = view.Inverse();
-	view.exportVBO(view_mat);
-	proj.exportVBO(proj_mat);*/
-	//QMatrix4x4 qproj;
-	//qproj.perspective(60, 1, 0.1, 100);
-	//qproj.inverted();
-	//resetCamera();
 }
 
 OGLViewer::~OGLViewer()
 {
-	delete box_mesh;
-	box_mesh = nullptr;
-	delete model_mesh;
-	model_mesh = nullptr;
-	delete model_shader;
-	model_shader = nullptr;
 }
 /************************************************************************/
 /* OpenGL Rendering Modules                                             */
@@ -79,7 +61,7 @@ void OGLViewer::initializeGL()
 	//////////////////////////////////////////////////////////////////////////
 
 	// Create shader files
-	model_shader = new GLSLProgram("vert.glsl", "frag.glsl");
+	model_shader.reset(new GLSLProgram("mesh_vs.glsl", "mesh_fs.glsl"));
 
 	// Export vbo for shaders
 	box_mesh->exportVBO(&box_verts, &box_uvs, &box_norms);
@@ -87,11 +69,6 @@ void OGLViewer::initializeGL()
 
 	bindBox();
 	bindMesh();
-
-	// Get uniform variable location
-	model_mat_loc = model_shader->getUniformLocation("model_matrix");
-	view_mat_loc = model_shader->getUniformLocation("view_matrix");
-	proj_mat_loc = model_shader->getUniformLocation("proj_matrix");; // WorldToCamera matrix
 }
 
 void OGLViewer::bindBox()
@@ -186,8 +163,8 @@ void OGLViewer::paintGL()
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
 	vector<GLfloat> projmatvec(proj_mat, proj_mat + 16);
-	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
-	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, &projmatvec[0]);
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, view_mat);
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, box_verts.size() / 3);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -201,8 +178,8 @@ void OGLViewer::paintGL()
 
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-	glUniformMatrix4fv(view_mat_loc, 1, GL_FALSE, view_mat);
-	glUniformMatrix4fv(proj_mat_loc, 1, GL_FALSE, proj_mat);
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, view_mat);
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, proj_mat);
 	glDrawArrays(GL_TRIANGLES, 0, model_verts.size() / 3);
 	glBindVertexArray(0);
 }
@@ -329,15 +306,9 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	delete view_cam;
-	//Matrix4D cam2w = Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0));
-
-	//view_cam->setCamToWorld(Matrix4D::LookAt(Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0)));
-	//Transform pers = Transform(Matrix4D::Perspective(67,
-	//	width() / static_cast<double>(height()), 0.1, 100));
-	view_cam = new perspCamera(
-		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
-		width() / static_cast<double>(height()));
+	view_cam.reset(new perspCamera(
+		Point3f(10, 6, 10), Point3f(0.0, 0.0, 0.0), Vector3f(0, 1, 0),
+		width() / static_cast<Float>(height())));
 	//view_cam->exportVBO(view_mat, proj_mat, nullptr);
 	//update();
 }
