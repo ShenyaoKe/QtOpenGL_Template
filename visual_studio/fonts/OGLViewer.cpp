@@ -6,9 +6,9 @@ OGLViewer::OGLViewer(QWidget *parent)
 	, m_selectMode(OBJECT_SELECT)
 	, fontTex("font.bmp")
 	, view_cam(new perspCamera(
-		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
+		Point3f(10, 6, 10), Point3f(0, 0, 0), Vector3f(0, 1, 0),
 		width() / static_cast<double>(height())))
-	, model_mesh(new Mesh("../../scene/obj/monkey.obj"))
+	, model_mesh(new TriangleMesh("../../scene/obj/monkey.obj"))
 {
 	auto ctx = this->context();
 	
@@ -123,25 +123,21 @@ void OGLViewer::bindMesh()
 	//////////////////////////////////////////////////////////////////////////
 	// Texture initialization
 	//////////////////////////////////////////////////////////////////////////
-	glActiveTexture(GL_TEXTURE0);
 	glGenTextures(1, &texID);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texID);
 
-	//if (fontTex.format() == QImage::Format_Indexed8)
+	if (fontTex.format() == QImage::Format_Indexed8)
 	{
-		glTexStorage2D(GL_TEXTURE_2D, 1, GL_R8UI, 2, 2);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, 2, 2, 0, GL_RED, GL_UNSIGNED_BYTE, texture);
+		//cout << "tex format: " << fontTex.format() << endl;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, fontTex.width(), fontTex.height(), 0, GL_RED, GL_UNSIGNED_BYTE, fontTex.bits());
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		/*for (int i = 0; i < fontTex.width()*fontTex.height(); i++)
-		{
-			if (fontTex.constBits()[i] > 0)
-			{
-				cout << " " << fontTex.constBits()[i] + '0';
-			}
-		}*/
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	}
 	
 }
@@ -172,9 +168,9 @@ void OGLViewer::paintGL()
 
 	//
 	glBindVertexArray(grid_vao);
-	tex_shader->use_program();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texID);
+	tex_shader->use_program();
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 
 	glBindVertexArray(0);
@@ -304,10 +300,9 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	delete view_cam;
-	view_cam = new perspCamera(
-		Point3D(10, 6, 10), Point3D(0.0, 0.0, 0.0), Point3D(0, 1, 0),
-		width() / static_cast<double>(height()));
+	view_cam.reset(new perspCamera(
+		Point3f(10, 6, 10), Point3f(0.0, 0.0, 0.0), Vector3f(0, 1, 0),
+		width() / static_cast<double>(height())));
 }
 void OGLViewer::initParas()
 {

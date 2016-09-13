@@ -19,7 +19,7 @@
 
 #include "Math/MathUtil.h"
 #include "Image/ImageData.h"
-#include "Geometry/Mesh.h"
+#include "Geometry/TriangleMesh.h"
 //#include "Math/Matrix4D.h"
 #include "Camera/perspCamera.h"
 
@@ -87,8 +87,8 @@ private:
 private:
 	QImage fontTex;
 protected:
-	perspCamera* view_cam;
-	Matrix4D proj, view;
+	unique_ptr<perspCamera> view_cam;
+	Matrix4x4 proj, view;
 private: // OpenGL variables
 	int display_mode = 0;
 
@@ -98,7 +98,7 @@ private: // OpenGL variables
 	GLuint grid_vbo, grid_ibo, grid_vao;
 	GLuint texID;
 
-	Mesh *model_mesh;
+	TriangleMesh *model_mesh;
 	vector<GLfloat> model_verts;// vertices vbo
 	vector<GLfloat> model_uvs;// Texture coordinates vbo
 	vector<GLfloat> model_norms;// Normal coordinates vbo

@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Utils", "OpenGL_Util
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kaguya", "..\..\Kaguya\vs2015\Kaguya.vcxproj", "{E26467AF-7A85-484E-A54D-0488CA2D9F07}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fonts", "fonts\Fonts.vcxproj", "{752CADAF-A871-4B53-A447-3788DFD2C118}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,6 +35,12 @@ Global
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x64.ActiveCfg = Release|x64
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x64.Build.0 = Release|x64
 		{E26467AF-7A85-484E-A54D-0488CA2D9F07}.Release|x86.ActiveCfg = Release|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Debug|x64.ActiveCfg = Debug|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Debug|x64.Build.0 = Debug|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Debug|x86.ActiveCfg = Debug|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Release|x64.ActiveCfg = Release|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Release|x64.Build.0 = Release|x64
+		{752CADAF-A871-4B53-A447-3788DFD2C118}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

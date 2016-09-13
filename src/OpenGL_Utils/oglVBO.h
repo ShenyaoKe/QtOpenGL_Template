@@ -12,19 +12,19 @@ public:
 	//void CollapseCommonVertices(bool collapse);
 	void Draw();
 	void Begin(GLenum type);
-	void Color4fv(GLdouble *rgba);
+	void Color4fv(GLfloat *rgba);
 	void End();
-	void Normal3fv(GLdouble *nxyz);
-	void TexCoord2fv(GLdouble *st);
-	void Vertex2fv(GLdouble *xy);
-	void Vertex3fv(GLdouble *xyz);
+	void Normal3fv(GLfloat *nxyz);
+	void TexCoord2fv(GLfloat *st);
+	void Vertex2fv(GLfloat *xy);
+	void Vertex3fv(GLfloat *xyz);
 	//void Print(char *str = "", FILE *out = stderr);
 	//void RestartPrimitive();
 	void SetTol(float tol);
 private:
-	GLdouble *pts;
-	GLdouble *normal;
-	GLdouble *vcolor;
-	GLdouble *texcoord;
+	GLfloat *pts;
+	GLfloat *normal;
+	GLfloat *vcolor;
+	GLfloat *texcoord;
 	GLuint num;
 };

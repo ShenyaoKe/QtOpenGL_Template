@@ -9,6 +9,7 @@ out vec2 st;
 void main () {
 	// interpolate texture coordinates
 	st = (vp + 1.0) * 0.5;
+	st.y = 1 - st.y;
 	// transform vertex position to clip space (camera view and perspective)
 	gl_Position = vec4 (vp*0.5, -1.0, 1.0);
 }
