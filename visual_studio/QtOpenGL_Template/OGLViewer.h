@@ -23,11 +23,7 @@
 #include "Camera/perspCamera.h"
 
 //static int model_mat_loc;// Uniform matrix location
-static GLfloat model_mat[16];// Uniform matrix buffer
-//static int view_mat_loc;// Uniform matrix location
-static GLfloat view_mat[16];
-//static int proj_mat_loc;// Porjection matrix location
-static GLfloat proj_mat[16];
+
 
 const double eps = 5e-4;
 
@@ -67,7 +63,6 @@ public:
 	double process_fps;
 protected:
 	unique_ptr<perspCamera> view_cam;
-	Matrix4x4 proj, view;
 private:
 	int fps;
 	int tcount;
