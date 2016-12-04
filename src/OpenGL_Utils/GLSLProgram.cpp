@@ -7,12 +7,30 @@ GLSLProgram::GLSLProgram()
 {
 }*/
 
-
-GLSLProgram::GLSLProgram(const char *vert, const char* frag,
-	const char* geom, const char* tcs, const char* tes)
-	: program(0), shaders{}
+GLSLProgram::GLSLProgram(const char* vert,
+                         const char* frag,
+                         const char* geom,
+                         const char* tcs,
+                         const char* tes,
+                         bool isXformFeedback,
+                         size_t xformFdbVaryingCount,
+                         const char* fdbVaryings[])
+                       : program(0), shaders{}
 {
-	create(vert, frag, geom, tcs, tes);
+    bool isProgram = false;
+    if (create_shaders(vert, frag, geom, tcs, tes))
+    {
+        isProgram = createProgram();
+    }
+
+    if (isXformFeedback && isProgram && fdbVaryings)
+    {
+        glTransformFeedbackVaryings(program,
+                                    xformFdbVaryingCount,
+                                    fdbVaryings,
+                                    GL_INTERLEAVED_ATTRIBS);
+    }
+    linkProgram();
 }
 
 GLSLProgram::~GLSLProgram()
@@ -25,8 +43,9 @@ GLSLProgram::~GLSLProgram()
 	//delete[]shaders;
 }
 
-bool GLSLProgram::create(const char *vert, const char* frag,
-	const char* geom, const char* tcs, const char* tes)
+bool GLSLProgram::create_shaders(const char* vert, const char* frag,
+	                     const char* geom,
+                         const char* tcs, const char* tes)
 {
 	if (vert == nullptr)
 	{
@@ -69,9 +88,50 @@ bool GLSLProgram::create(const char *vert, const char* frag,
 		{
 			return false;
 		}
-	}
-	create_program();
+    }
+    //create_program();
 	return true;
+}
+
+bool GLSLProgram::createProgram()
+{
+    program = glCreateProgram();
+    if (!program) return false;
+    for (int i = 0; i < 5; i++)
+    {
+        if (shaders[i] != 0)
+        {
+            glAttachShader(program, shaders[i]);
+            //glDeleteShader(*shaders[i]);
+        }
+    }
+    return true;
+}
+
+bool GLSLProgram::linkProgram()
+{
+    glLinkProgram(program);
+
+#ifdef _DEBUG
+    GLint params = -1;
+    glGetProgramiv(program, GL_LINK_STATUS, &params);
+    if (params == GL_FALSE)
+    {
+        cout << "ERROR: could not link shader programme GL index %u\n";
+
+        GLint infoLogLength;
+        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+        GLchar *infoLog = new GLchar[infoLogLength];
+        glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
+        cout << "*************************************************************\n"
+            << "*                       Link log                            *\n"
+            << infoLog
+            << "*************************************************************\n";
+        delete [] infoLog;
+        return false;
+    }
+#endif
+    return true;
 }
 
 void GLSLProgram::del_program()
@@ -131,7 +191,8 @@ GLuint GLSLProgram::operator[](const string &attribute)
 	return glGetUniformLocation(program, attribute.c_str());
 }
 
-bool GLSLProgram::read_shader_file(const char *file_name, char* &shader_str) const
+bool GLSLProgram::read_shader_file(const char *file_name,
+                                   char* &shader_str) const
 {
 	shader_str = nullptr; // reset string
 	std::ifstream shader_file(file_name);
@@ -197,13 +258,13 @@ bool GLSLProgram::create_program()
 	}
 	glLinkProgram(program);
 
+#ifdef _DEBUG
 	GLint params = -1;
 	glGetProgramiv(program, GL_LINK_STATUS, &params);
 	if (params == GL_FALSE)
 	{
 		cout<<"ERROR: could not link shader programme GL index %u\n";
 		
-#ifdef _DEBUG
 		GLint infoLogLength;
 		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar *infoLog = new GLchar[infoLogLength];
@@ -213,8 +274,8 @@ bool GLSLProgram::create_program()
 				<< infoLog
 				<< "*************************************************************\n";
 		delete[] infoLog;
-#endif
 		return false;
-	}
+    }
+#endif
 	return true;
 }

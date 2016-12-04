@@ -19,28 +19,50 @@ using std::string;
 using std::vector;
 using std::unordered_map;
 
+class GLSLShader
+{
+public:
+    GLSLShader(GLenum shader_t);
+	GLSLShader(const string &filename, GLenum shader_t);
+	~GLSLShader();
+protected:
+	
+private:
+};
 class GLSLProgram
 {
 public:
 	//GLSLProgram();
-	GLSLProgram(
-		const char *vert, const char* frag = nullptr,
-		const char* geom = nullptr,
-		const char* tcs = nullptr, const char* tes = nullptr);
+	GLSLProgram(const char* vert,
+                const char* frag = nullptr,
+		        const char* geom = nullptr,
+		        const char* tcs = nullptr,
+                const char* tes = nullptr,
+                bool isXformFeedback = false,
+                size_t xformFdbVaryingCount = 0,
+                const char* xformVaryings[] = nullptr);
 	~GLSLProgram();
 
-	bool create(const char *vert, const char* frag = nullptr,
-		const char* geom = nullptr,
-		const char* tcs = nullptr, const char* tes = nullptr);
+	bool create_shaders(const char* vert,
+                        const char* frag = nullptr,
+		                const char* geom = nullptr,
+		                const char* tcs = nullptr,
+                        const char* tes = nullptr);
 	void del_program();
 	bool use_program() const;
-	bool unuse() const;
+    bool unuse() const;
+    // Refined workflow
+    bool attachShader(const char* vert, const char* frag = nullptr,
+                      const char* geom = nullptr,
+                      const char* tcs = nullptr, const char* tes = nullptr);
+    bool createProgram();
+    bool linkProgram();
 
 	// Uniform
 	GLuint getUniformLocation(const char *name) const;
 	void add_uniformv(const string &uniform);
-	GLuint operator ()(const string &uniform);
-	GLuint operator [](const string &uniform);
+	GLuint operator () (const string &uniform);
+	GLuint operator [] (const string &uniform);
 	GLuint get(GLenum type = 0);
 
 	//GLuint operator[](const string &uniform);
