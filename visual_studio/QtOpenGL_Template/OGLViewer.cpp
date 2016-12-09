@@ -4,14 +4,13 @@
 OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), tcount(0), fps(30)
 	, m_selectMode(OBJECT_SELECT)
-	, view_cam(new perspCamera(
-		Point3f(10, 6, 10), Point3f(0.0, 0.0, 0.0), Vector3f(0, 1, 0),
-		width() / static_cast<double>(height())))
+	, view_cam(new perspCamera(Point3f(10, 6, 11),
+                               Point3f(0, 0, 0),
+                               Vector3f(0, 1, 0),
+		                       width() / float(height())))
 	, box_mesh(new TriangleMesh("../../scene/obj/cube_large.obj"))
 	, model_mesh(new TriangleMesh("../../scene/obj/monkey.obj"))
 {
-	auto ctx = this->context();
-	cout << "default fbo:\t" << defaultFramebufferObject() << endl;
 	// Set surface format for current widget
 	QSurfaceFormat format;
 	format.setDepthBufferSize(32);
@@ -93,7 +92,6 @@ void OGLViewer::bindBox()
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 }
 
 void OGLViewer::bindMesh()

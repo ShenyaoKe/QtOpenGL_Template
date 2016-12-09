@@ -46,15 +46,20 @@ public:
 	bool create_shaders(const char* vert,
                         const char* frag = nullptr,
 		                const char* geom = nullptr,
-		                const char* tcs = nullptr,
-                        const char* tes = nullptr);
+		                const char* tcs  = nullptr,
+                        const char* tes  = nullptr);
 	void del_program();
 	bool use_program() const;
     bool unuse() const;
     // Refined workflow
-    bool attachShader(const char* vert, const char* frag = nullptr,
-                      const char* geom = nullptr,
-                      const char* tcs = nullptr, const char* tes = nullptr);
+    bool attachShader(GLuint shader_handle, GLenum shader_t);
+    bool attachShaderFromFile(const char* vert, GLenum shader_t);
+    bool attachShaderFromString(const char* vert, GLenum shader_t);
+    bool attachShaders(const char* vert = nullptr,
+                       const char* frag = nullptr,
+                       const char* geom = nullptr,
+                       const char* tcs  = nullptr,
+                       const char* tes  = nullptr);
     bool createProgram();
     bool linkProgram();
 
