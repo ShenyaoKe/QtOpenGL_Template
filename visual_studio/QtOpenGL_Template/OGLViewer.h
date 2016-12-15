@@ -19,14 +19,7 @@
 #include "Math/MathUtil.h"
 #include "Image/ImageData.h"
 #include "Geometry/TriangleMesh.h"
-//#include "Math/Matrix4D.h"
-#include "Camera/perspCamera.h"
-
-//static int model_mat_loc;// Uniform matrix location
-
-
-const double eps = 5e-4;
-
+#include "Camera/PerspectiveCamera.h"
 
 // OpenGL Window in Qt
 class OGLViewer : public QOpenGLWidget
@@ -62,7 +55,7 @@ private:
 public:
 	double process_fps;
 protected:
-	unique_ptr<perspCamera> view_cam;
+	unique_ptr<PerspectiveCamera> view_cam;
 private:
 	int fps;
 	int tcount;

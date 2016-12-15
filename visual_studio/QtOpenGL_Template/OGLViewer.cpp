@@ -4,10 +4,10 @@
 OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), tcount(0), fps(30)
 	, m_selectMode(OBJECT_SELECT)
-	, view_cam(new perspCamera(Point3f(10, 6, 11),
-                               Point3f(0, 0, 0),
-                               Vector3f(0, 1, 0),
-		                       width() / float(height())))
+	, view_cam(new PerspectiveCamera(Point3f(10, 6, 11),
+                                     Point3f(0, 0, 0),
+                                     Vector3f(0, 1, 0),
+                                     width() / float(height())))
 	, box_mesh(new TriangleMesh("../../scene/obj/cube_large.obj"))
 	, model_mesh(new TriangleMesh("../../scene/obj/monkey.obj"))
 {
@@ -288,9 +288,10 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	view_cam.reset(new perspCamera(
-		Point3f(10, 6, 10), Point3f(0, 0, 0), Vector3f(0, 1, 0),
-		width() / static_cast<Float>(height())));
+	view_cam.reset(new PerspectiveCamera(Point3f(10, 6, 10),
+                                         Point3f(0, 0, 0),
+                                         Vector3f(0, 1, 0),
+                                         width() / Float(height())));
 }
 void OGLViewer::initParas()
 {
