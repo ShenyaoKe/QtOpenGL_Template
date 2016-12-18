@@ -16,21 +16,21 @@ class MainWindow : public QMainWindow, protected QOpenGLFunctions
 	Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = 0);
+	MainWindow(QWidget* parent = 0);
 	~MainWindow();
 
-public slots:
-	void on_actionAbout_triggered();
+public:
+	void triggerAboutWindow();
 	//void aboutwindow();
 protected:
-	void closeEvent(QCloseEvent *e);
+	void closeEvent(QCloseEvent* e);
 private:
-	bool m_update_pending;
-	bool m_animating;
+	bool mUpdatePending;
+	bool mAnimating;
 
-	OGLViewer *m_oglviewer;
-	QDialog *about;
-	Ui::MainWindowClass ui;
+	OGLViewer* mOGLViewer;
+	QDialog* mAbout;
+	Ui::MainWindowClass mUI;
 };
 
 #endif // QTOGL_WINDOW_H

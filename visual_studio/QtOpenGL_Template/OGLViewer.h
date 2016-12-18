@@ -11,8 +11,6 @@
 #include <QTime>
 #include <QString>
 #include <QFileDialog>
-#include <QOpenGLVertexArrayObject>
-//#include <QGLFunctions>
 
 #include "OpenGL_Utils/GLSLProgram.h"
 
@@ -35,10 +33,7 @@ public:
 	OGLViewer(QWidget *parent = nullptr);
 	~OGLViewer();
 
-	//void update();
-	public slots:
 	void resetCamera();
-	void initParas();
 protected:
 	void initializeGL() Q_DECL_OVERRIDE;
 	void paintGL() Q_DECL_OVERRIDE;
@@ -53,18 +48,18 @@ private:
 	void bindMesh();
 	void saveFrameBuffer();
 public:
-	double process_fps;
 protected:
-	unique_ptr<PerspectiveCamera> view_cam;
 private:
-	int fps;
-	int tcount;
+    float mProcessFps;
+	int mFps;
+	int mTimeCount;
 
-	QTime process_time;
-	int m_lastMousePos[2];
-	int m_selectMode;
-private: // OpenGL variables
-	int display_mode = 0;
+	QTime mProcTime;
+	int mLastMousePos[2];
+	int mSelectMode;
+    
+    // OpenGL variables
+	int mDisplayMode = 0;
 
 	unique_ptr<TriangleMesh> box_mesh;// Display object
 	vector<GLfloat> box_verts;// vertices vbo
@@ -81,6 +76,8 @@ private: // OpenGL variables
 	vector<GLfloat> filmgate, resgate;
 
 	unique_ptr<GLSLProgram> model_shader;// OpenGL shader program
+
+	unique_ptr<PerspectiveCamera> mViewCamera;
 
 	friend class MainWindow;
 };

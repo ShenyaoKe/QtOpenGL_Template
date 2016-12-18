@@ -2,9 +2,9 @@
 #include <QMatrix4x4>
 
 OGLViewer::OGLViewer(QWidget *parent)
-	: QOpenGLWidget(parent), tcount(0), fps(30)
-	, m_selectMode(OBJECT_SELECT)
-	, view_cam(new PerspectiveCamera(Point3f(10, 6, 11),
+	: QOpenGLWidget(parent), mTimeCount(0), mFps(30)
+	, mSelectMode(OBJECT_SELECT)
+	, mViewCamera(new PerspectiveCamera(Point3f(10, 6, 11),
                                      Point3f(0, 0, 0),
                                      Vector3f(0, 1, 0),
                                      width() / float(height())))
@@ -44,14 +44,13 @@ void OGLViewer::initializeGL()
 
 	// Enable OpenGL features
 	glEnable(GL_MULTISAMPLE);
-	//glEnable(GL_LINE_SMOOTH);
-	//glEnable(GL_POLYGON_SMOOTH);
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glFrontFace(GL_CCW); // set counter-clock-wise vertex order to mean the front
 
+    glClearColor(0.6, 0.6, 0.6, 0.0);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -136,10 +135,9 @@ void OGLViewer::paintGL()
 
 	glDisable(GL_MULTISAMPLE);
 	// Clear background and color buffer
-	glClearColor(0.6, 0.6, 0.6, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (display_mode == 0)// Wireframe
+	if (mDisplayMode == 0)// Wireframe
 	{
 		glDisable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -156,8 +154,8 @@ void OGLViewer::paintGL()
 	model_shader->use_program();
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, view_cam->world_to_cam());
-	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, view_cam->cam_to_screen());
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, mViewCamera->world_to_cam());
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, mViewCamera->cam_to_screen());
 	glDrawArrays(GL_TRIANGLES, 0, box_verts.size() / 3);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -171,8 +169,8 @@ void OGLViewer::paintGL()
 
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, view_cam->world_to_cam());
-	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, view_cam->cam_to_screen());
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, mViewCamera->world_to_cam());
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, mViewCamera->cam_to_screen());
 	glDrawArrays(GL_TRIANGLES, 0, model_verts.size() / 3);
 	glBindVertexArray(0);
 }
@@ -182,8 +180,7 @@ void OGLViewer::paintGL()
 void OGLViewer::resizeGL(int w, int h)
 {
 	// Widget resize operations
-	view_cam->resizeViewport(width() / static_cast<double>(height()));
-	//view_cam->setResolution(width(), height());
+	mViewCamera->resizeViewport(width() / Float(height()));
 }
 /************************************************************************/
 /* Qt User Operation Functions                                          */
@@ -192,36 +189,32 @@ void OGLViewer::keyPressEvent(QKeyEvent *e)
 {
 	if (e->key() == Qt::Key_W)
 	{
-		view_cam->zoom(0.0, 0.0, 0.10);
+		mViewCamera->zoom(0.0, 0.0, 0.10);
 	}
 	else if (e->key() == Qt::Key_S)
 	{
-		view_cam->zoom(0.0, 0.0, -0.10);
+		mViewCamera->zoom(0.0, 0.0, -0.10);
 	}
 	else if (e->key() == Qt::Key_Q)
 	{
-		view_cam->zoom(0.10, 0.0, 0.0);
+		mViewCamera->zoom(0.10, 0.0, 0.0);
 	}
 	else if (e->key() == Qt::Key_A)
 	{
-		view_cam->zoom(-0.10, 0.0, 0.0);
+		mViewCamera->zoom(-0.10, 0.0, 0.0);
 	}
 	else if (e->key() == Qt::Key_E)
 	{
-		view_cam->zoom(0.0, 0.10, 0.0);
+		mViewCamera->zoom(0.0, 0.10, 0.0);
 	}
 	else if (e->key() == Qt::Key_D)
 	{
-		view_cam->zoom(0.0, -0.10, 0.0);
-	}
-	else if (e->key() == Qt::Key_Home)
-	{
-		initParas();
+		mViewCamera->zoom(0.0, -0.10, 0.0);
 	}
 	// Save frame buffer
 	else if (e->key() == Qt::Key_P && e->modifiers() == Qt::ControlModifier)
 	{
-		this->saveFrameBuffer();
+		saveFrameBuffer();
 	}
 	//////////////////////////////////////////////////////////////////////////
 	else
@@ -233,8 +226,8 @@ void OGLViewer::keyPressEvent(QKeyEvent *e)
 
 void OGLViewer::mousePressEvent(QMouseEvent *e)
 {
-	m_lastMousePos[0] = e->x();
-	m_lastMousePos[1] = e->y();
+	mLastMousePos[0] = e->x();
+	mLastMousePos[1] = e->y();
 	if ((e->buttons() == Qt::LeftButton) && (e->modifiers() == Qt::AltModifier))
 	{
 		// Do something here
@@ -243,27 +236,27 @@ void OGLViewer::mousePressEvent(QMouseEvent *e)
 
 void OGLViewer::mouseReleaseEvent(QMouseEvent *e)
 {
-	m_lastMousePos[0] = e->x();
-	m_lastMousePos[1] = e->y();
+	mLastMousePos[0] = e->x();
+	mLastMousePos[1] = e->y();
 }
 
 void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 {
-	int dx = e->x() - m_lastMousePos[0];
-	int dy = e->y() - m_lastMousePos[1];
+	int dx = e->x() - mLastMousePos[0];
+	int dy = e->y() - mLastMousePos[1];
 
 	//printf("dx: %d, dy: %d\n", dx, dy);
 
 	if ((e->buttons() == Qt::LeftButton) && (e->modifiers() == Qt::AltModifier))
 	{
-		view_cam->rotate(dy * 0.25, -dx * 0.25, 0.0);
+		mViewCamera->rotate(dy * 0.25, -dx * 0.25, 0.0);
 		update();
 	}
 	else if ((e->buttons() == Qt::RightButton) && (e->modifiers() == Qt::AltModifier))
 	{
 		if (dx != e->x() && dy != e->y())
 		{
-			view_cam->zoom(0.0, 0.0, dx * 0.05);
+			mViewCamera->zoom(0.0, 0.0, dx * 0.05);
 			update();
 		}
 	}
@@ -271,7 +264,7 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 	{
 		if (dx != e->x() && dy != e->y())
 		{
-			view_cam->zoom(-dx * 0.05, dy * 0.05, 0.0);
+			mViewCamera->zoom(-dx * 0.05, dy * 0.05, 0.0);
 			update();
 		}
 	}
@@ -280,27 +273,23 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 		QOpenGLWidget::mouseMoveEvent(e);
 	}
 
-	m_lastMousePos[0] = e->x();
-	m_lastMousePos[1] = e->y();
+	mLastMousePos[0] = e->x();
+	mLastMousePos[1] = e->y();
 }
 /************************************************************************/
 /* Application Functions                                                */
 /************************************************************************/
 void OGLViewer::resetCamera()
 {
-	view_cam.reset(new PerspectiveCamera(Point3f(10, 6, 10),
-                                         Point3f(0, 0, 0),
-                                         Vector3f(0, 1, 0),
-                                         width() / Float(height())));
-}
-void OGLViewer::initParas()
-{
-	update();
+	mViewCamera.reset(new PerspectiveCamera(Point3f(10, 6, 10),
+                                            Point3f(0, 0, 0),
+                                            Vector3f(0, 1, 0),
+                                            width() / Float(height())));
 }
 
 void OGLViewer::saveFrameBuffer()
 {
 	QString filename = QFileDialog::getSaveFileName(
 		this, "Save Screenshot file...", "default", tr("PNG(*.png)"));
-	this->grab().save(filename);
+	grab().save(filename);
 }
