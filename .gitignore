@@ -199,8 +199,11 @@ FakesAssemblies/
 GeneratedFiles
 /include/OpenGL_Utils
 /include/Kaguya
+OpenGL_Utils*.lib
+Kaguya*.lib
 Qt5Core*.dll
 Qt5Gui*.dll
 Qt5OpenGL*.dll
 Qt5Widgets*.dll
 platforms
+*.db
