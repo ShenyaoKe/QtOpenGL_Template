@@ -5,6 +5,12 @@
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION > QT_VERSION_CHECK(5, 5, 0)
+	qunsetenv("QT_DEVICE_PIXEL_RATIO");
+	qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", QByteArray("1"));
+#else
+	qputenv("QT_DEVICE_PIXEL_RATIO", QByteArray("0"));
+#endif
 
 	QApplication qtApp(argc, argv);
 	QFile File("stylesheet.qss");
@@ -14,14 +20,6 @@ int main(int argc, char *argv[])
 	qtApp.setStyleSheet(StyleSheet);
 	MainWindow w;
 	w.show();
-	/*QSurfaceFormat format;
-	format.setDepthBufferSize(32);
-	format.setStencilBufferSize(8);
-	format.setVersion(4, 5);
-	format.setProfile(QSurfaceFormat::CoreProfile);
-	QSurfaceFormat::setDefaultFormat(format);*/
 
-	/*OGLViewer oglWindow;
-	oglWindow.show();*/
 	return qtApp.exec();
 }
