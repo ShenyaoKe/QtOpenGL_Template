@@ -43,9 +43,11 @@ GLSLProgram::~GLSLProgram()
 	//delete[]shaders;
 }
 
-bool GLSLProgram::create_shaders(const char* vert, const char* frag,
-	                     const char* geom,
-                         const char* tcs, const char* tes)
+bool GLSLProgram::create_shaders(const char* vert,
+								 const char* frag,
+								 const char* geom,
+								 const char* tcs,
+								 const char* tes)
 {
 	if (vert == nullptr)
 	{
@@ -110,28 +112,28 @@ bool GLSLProgram::createProgram()
 
 bool GLSLProgram::linkProgram()
 {
-    glLinkProgram(program);
+	glLinkProgram(program);
 
 #ifdef _DEBUG
-    GLint params = -1;
-    glGetProgramiv(program, GL_LINK_STATUS, &params);
-    if (params == GL_FALSE)
-    {
-        cout << "ERROR: could not link shader programme GL index %u\n";
+	GLint params = -1;
+	glGetProgramiv(program, GL_LINK_STATUS, &params);
+	if (params == GL_FALSE)
+	{
+		cout << "ERROR: could not link shader programme GL index %u\n";
 
-        GLint infoLogLength;
-        glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
-        GLchar *infoLog = new GLchar[infoLogLength];
-        glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
-        cout << "*************************************************************\n"
-            << "*                       Link log                            *\n"
-            << infoLog
-            << "*************************************************************\n";
-        delete [] infoLog;
-        return false;
-    }
+		GLint infoLogLength;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+		GLchar *infoLog = new GLchar[infoLogLength];
+		glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
+		cout << "*************************************************************\n"
+			<< "*                       Link log                            *\n"
+			<< infoLog
+			<< "*************************************************************\n";
+		delete[] infoLog;
+		return false;
+	}
 #endif
-    return true;
+	return true;
 }
 
 void GLSLProgram::del_program()
@@ -191,8 +193,8 @@ GLuint GLSLProgram::operator[](const string &attribute)
 	return glGetUniformLocation(program, attribute.c_str());
 }
 
-bool GLSLProgram::read_shader_file(const char *file_name,
-                                   char* &shader_str) const
+bool GLSLProgram::read_shader_file(
+	const char *file_name, char* &shader_str) const
 {
 	shader_str = nullptr; // reset string
 	std::ifstream shader_file(file_name);

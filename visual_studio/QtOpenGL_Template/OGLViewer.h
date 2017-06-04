@@ -1,6 +1,4 @@
 #pragma once
-#ifndef __OGLVIEWER__
-#define __OGLVIEWER__
 
 #include "GL/glew.h"
 #include "common.h"
@@ -35,17 +33,16 @@ public:
 
 	void resetCamera();
 protected:
-	void initializeGL() Q_DECL_OVERRIDE;
-	void paintGL() Q_DECL_OVERRIDE;
-	void resizeGL(int w, int h) Q_DECL_OVERRIDE;
+	void initializeGL() override;
+	void paintGL() override;
+	void resizeGL(int w, int h) override;
 
-	void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
-	void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-	void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-	void mouseMoveEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+	void keyPressEvent(QKeyEvent *e) override;
+	void mousePressEvent(QMouseEvent *e) override;
+	void mouseReleaseEvent(QMouseEvent *e) override;
+	void mouseMoveEvent(QMouseEvent *e) override;
 private:
-	void bindBox();
-	void bindMesh();
+    GLuint createRenderObject(const Kaguya::RenderBufferTrait &trait);
 	void saveFrameBuffer();
 public:
 protected:
@@ -61,25 +58,23 @@ private:
     // OpenGL variables
 	int mDisplayMode = 0;
 
-	unique_ptr<TriangleMesh> box_mesh;// Display object
-	vector<GLfloat> box_verts;// vertices vbo
-	vector<GLfloat> box_uvs;// Texture coordinates vbo
-	vector<GLfloat> box_norms;// Normal coordinates vbo
-	GLuint box_vert_vbo, box_norm_vbo, box_vao;
+	shared_ptr<Kaguya::TriangleMesh> box_mesh;// Display object
+    Kaguya::RenderBufferTrait boxTrait;
+	GLuint box_vao;
 
-	unique_ptr<TriangleMesh> model_mesh;
-	vector<GLfloat> model_verts;// vertices vbo
-	vector<GLfloat> model_uvs;// Texture coordinates vbo
-	vector<GLfloat> model_norms;// Normal coordinates vbo
-	GLuint model_vert_vbo, model_norm_vbo, model_uv_vbo, model_vao;
+    shared_ptr<Kaguya::TriangleMesh> model_mesh;
+    Kaguya::RenderBufferTrait modelTrait;
+	GLuint model_vao;
 
 	vector<GLfloat> filmgate, resgate;
 
+    Kaguya::Matrix4x4 cam = Kaguya::Matrix4x4::lookAt(
+        Kaguya::Point3f(0,0,-5), Kaguya::Point3f(0,0,0), Kaguya::Vector3f(0,1,0));
+    Kaguya::Matrix4x4 ortho = Kaguya::Matrix4x4::orthography(-10,10,-10,10,-10,50);
+
 	unique_ptr<GLSLProgram> model_shader;// OpenGL shader program
 
-	unique_ptr<PerspectiveCamera> mViewCamera;
+	unique_ptr<Kaguya::PerspectiveCamera> mViewCamera;
 
 	friend class MainWindow;
 };
-
-#endif // __OGLVIEWER__

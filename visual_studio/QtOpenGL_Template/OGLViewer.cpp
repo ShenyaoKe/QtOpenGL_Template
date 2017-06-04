@@ -1,15 +1,19 @@
 #include "OGLViewer.h"
 #include <QMatrix4x4>
+#include <Kaguya/IO/ObjLoader.h>
+
+using namespace Kaguya;
 
 OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), mTimeCount(0), mFps(30)
 	, mSelectMode(OBJECT_SELECT)
-	, mViewCamera(new PerspectiveCamera(Point3f(10, 6, 11),
-                                     Point3f(0, 0, 0),
-                                     Vector3f(0, 1, 0),
-                                     width() / float(height())))
-	, box_mesh(new TriangleMesh("../../scene/obj/cube_large.obj"))
-	, model_mesh(new TriangleMesh("../../scene/obj/monkey.obj"))
+	, mViewCamera(new Kaguya::PerspectiveCamera(
+        Kaguya::Point3f(10, 6, 11),
+        Kaguya::Point3f(0, 0, 0),
+        Kaguya::Vector3f(0, 1, 0),
+        width() / float(height())))
+	, box_mesh(ObjLoader::loadTriangleMesh("../../scene/obj/cube_large.obj"))
+	, model_mesh(ObjLoader::loadTriangleMesh("../../scene/obj/monkey.obj"))
 {
 	// Set surface format for current widget
 	QSurfaceFormat format;
@@ -58,74 +62,37 @@ void OGLViewer::initializeGL()
 	model_shader.reset(new GLSLProgram("mesh_vs.glsl", "mesh_fs.glsl"));
 
 	// Export vbo for shaders
-	box_mesh->exportVBO(&box_verts, &box_uvs, &box_norms);
-	model_mesh->exportVBO(&model_verts, &model_uvs, &model_norms);
+     
+    model_mesh->getRenderBuffer(&modelTrait);
+    model_vao = createRenderObject(modelTrait);
 
-	bindBox();
-	bindMesh();
+    box_mesh->getRenderBuffer(&boxTrait);
+    box_vao = createRenderObject(boxTrait);
 }
 
-void OGLViewer::bindBox()
+GLuint OGLViewer::createRenderObject(const RenderBufferTrait &trait)
 {
-	glDeleteBuffers(1, &box_vert_vbo);
-	glDeleteBuffers(1, &box_norm_vbo);
-	glDeleteVertexArrays(1, &box_vao);
-	// Bind VAO
-	glGenVertexArrays(1, &box_vao);
-	glBindVertexArray(box_vao);
+    GLuint vbo, ibo, vao;
 
-	//GLuint box_vert_vbo;
-	glGenBuffers(1, &box_vert_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, box_vert_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * box_verts.size(), &box_verts[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(0);
+    // VBO
+    glCreateBuffers(1, &vbo);
+    glNamedBufferData(vbo, trait.vertex.size, trait.vertex.data, GL_STATIC_DRAW);
+    // IBO
+    glCreateBuffers(1, &ibo);
+    glNamedBufferData(ibo, trait.index.size, trait.index.data, GL_STATIC_DRAW);
+    //indexCount = trait.index.count;
 
-	// Bind normal value as color
-	//GLuint box_norm_vbo;
-	glGenBuffers(1, &box_norm_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, box_norm_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * box_norms.size(), &box_norms[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(1);
+    // Bind VAO
+    glCreateVertexArrays(1, &vao);
+    glEnableVertexArrayAttrib(vao, 0);
 
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
+    // Attach VBO and IBO to VAO
+    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexArrayVertexBuffer(vao, 0, vbo, trait.vertex.offset, trait.vertex.stride);
+    glVertexArrayAttribBinding(vao, 0, 0);
+    glVertexArrayElementBuffer(vao, ibo);
 
-void OGLViewer::bindMesh()
-{
-	glDeleteBuffers(1, &model_vert_vbo);
-	glDeleteBuffers(1, &model_norm_vbo);
-	glDeleteBuffers(1, &model_uv_vbo);
-	glDeleteVertexArrays(1, &model_vao);
-
-	// Bind VAO
-	glGenVertexArrays(1, &model_vao);
-	glBindVertexArray(model_vao);
-	
-	glGenBuffers(1, &model_vert_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, model_vert_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model_verts.size(), &model_verts[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(0);
-
-	// Bind normal value as color
-	glGenBuffers(1, &model_norm_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, model_norm_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * model_norms.size(), &model_norms[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(1);
-
-	// Bind UV values
-	/*glGenBuffers(1, &model_uv_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, model_uv_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * model_vbo_size, model_uvs, GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-	glEnableVertexAttribArray(2);*/
-	
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    return vao;
 }
 
 void OGLViewer::paintGL()
@@ -154,9 +121,9 @@ void OGLViewer::paintGL()
 	model_shader->use_program();
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, mViewCamera->world_to_cam());
-	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, mViewCamera->cam_to_screen());
-	glDrawArrays(GL_TRIANGLES, 0, box_verts.size() / 3);
+    glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());// mViewCamera->world_to_cam());
+    glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
+	glDrawElements(GL_TRIANGLES, boxTrait.index.count, GL_UNSIGNED_INT, 0);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Model
@@ -169,9 +136,9 @@ void OGLViewer::paintGL()
 
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, mViewCamera->world_to_cam());
-	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, mViewCamera->cam_to_screen());
-	glDrawArrays(GL_TRIANGLES, 0, model_verts.size() / 3);
+    glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());//mViewCamera->world_to_cam());
+    glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
+    glDrawElements(GL_TRIANGLES, modelTrait.index.count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 // Redraw function

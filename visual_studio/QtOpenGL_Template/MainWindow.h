@@ -1,17 +1,14 @@
 #pragma once
-#ifndef QTOGL_WINDOW_H
-#define QTOGL_WINDOW_H
+
+#include <QMainWindow>
+#include <QDialog>
 
 #include "OGLViewer.h"
-#include <QMainWindow>
-//#include <QtGui/QWindow>
-#include <QDialog>
-#include <QtGui/QOpenGLFunctions>
 #include "ui_MainWindow.h"
 #include "ui_About.h"
 
 
-class MainWindow : public QMainWindow, protected QOpenGLFunctions
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
@@ -32,5 +29,3 @@ private:
 	QDialog* mAbout;
 	Ui::MainWindowClass mUI;
 };
-
-#endif // QTOGL_WINDOW_H
