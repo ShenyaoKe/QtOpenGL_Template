@@ -8,10 +8,10 @@ OGLViewer::OGLViewer(QWidget *parent)
 	: QOpenGLWidget(parent), mTimeCount(0), mFps(30)
 	, mSelectMode(OBJECT_SELECT)
 	, mViewCamera(new Kaguya::PerspectiveCamera(
-        Kaguya::Point3f(10, 6, 11),
-        Kaguya::Point3f(0, 0, 0),
-        Kaguya::Vector3f(0, 1, 0),
-        width() / float(height())))
+		Kaguya::Point3f(10, 6, 11),
+		Kaguya::Point3f(0, 0, 0),
+		Kaguya::Vector3f(0, 1, 0),
+		width() / float(height())))
 	, box_mesh(ObjLoader::loadTriangleMesh("../../scene/obj/cube_large.obj"))
 	, model_mesh(ObjLoader::loadTriangleMesh("../../scene/obj/monkey.obj"))
 {
@@ -54,7 +54,7 @@ void OGLViewer::initializeGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glFrontFace(GL_CCW); // set counter-clock-wise vertex order to mean the front
 
-    glClearColor(0.6, 0.6, 0.6, 0.0);
+	glClearColor(0.6, 0.6, 0.6, 0.0);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -62,37 +62,37 @@ void OGLViewer::initializeGL()
 	model_shader.reset(new GLSLProgram("mesh_vs.glsl", "mesh_fs.glsl"));
 
 	// Export vbo for shaders
-     
-    model_mesh->getRenderBuffer(&modelTrait);
-    model_vao = createRenderObject(modelTrait);
 
-    box_mesh->getRenderBuffer(&boxTrait);
-    box_vao = createRenderObject(boxTrait);
+	model_mesh->getRenderBuffer(&modelTrait);
+	model_vao = createRenderObject(modelTrait);
+
+	box_mesh->getRenderBuffer(&boxTrait);
+	box_vao = createRenderObject(boxTrait);
 }
 
 GLuint OGLViewer::createRenderObject(const RenderBufferTrait &trait)
 {
-    GLuint vbo, ibo, vao;
+	GLuint vbo, ibo, vao;
 
-    // VBO
-    glCreateBuffers(1, &vbo);
-    glNamedBufferData(vbo, trait.vertex.size, trait.vertex.data, GL_STATIC_DRAW);
-    // IBO
-    glCreateBuffers(1, &ibo);
-    glNamedBufferData(ibo, trait.index.size, trait.index.data, GL_STATIC_DRAW);
-    //indexCount = trait.index.count;
+	// VBO
+	glCreateBuffers(1, &vbo);
+	glNamedBufferData(vbo, trait.vertex.size, trait.vertex.data, GL_STATIC_DRAW);
+	// IBO
+	glCreateBuffers(1, &ibo);
+	glNamedBufferData(ibo, trait.index.size, trait.index.data, GL_STATIC_DRAW);
+	//indexCount = trait.index.count;
 
-    // Bind VAO
-    glCreateVertexArrays(1, &vao);
-    glEnableVertexArrayAttrib(vao, 0);
+	// Bind VAO
+	glCreateVertexArrays(1, &vao);
+	glEnableVertexArrayAttrib(vao, 0);
 
-    // Attach VBO and IBO to VAO
-    glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
-    glVertexArrayVertexBuffer(vao, 0, vbo, trait.vertex.offset, trait.vertex.stride);
-    glVertexArrayAttribBinding(vao, 0, 0);
-    glVertexArrayElementBuffer(vao, ibo);
+	// Attach VBO and IBO to VAO
+	glVertexArrayAttribFormat(vao, 0, 3, GL_FLOAT, GL_FALSE, 0);
+	glVertexArrayVertexBuffer(vao, 0, vbo, trait.vertex.offset, trait.vertex.stride);
+	glVertexArrayAttribBinding(vao, 0, 0);
+	glVertexArrayElementBuffer(vao, ibo);
 
-    return vao;
+	return vao;
 }
 
 void OGLViewer::paintGL()
@@ -121,8 +121,8 @@ void OGLViewer::paintGL()
 	model_shader->use_program();
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-    glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());// mViewCamera->world_to_cam());
-    glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());// mViewCamera->world_to_cam());
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
 	glDrawElements(GL_TRIANGLES, boxTrait.index.count, GL_UNSIGNED_INT, 0);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -136,9 +136,9 @@ void OGLViewer::paintGL()
 
 	// Apply uniform matrix
 	//glUniformMatrix4fv(model_mat_loc, 1, GL_FALSE, model_mat);
-    glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());//mViewCamera->world_to_cam());
-    glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
-    glDrawElements(GL_TRIANGLES, modelTrait.index.count, GL_UNSIGNED_INT, 0);
+	glUniformMatrix4fv((*model_shader)["view_matrix"], 1, GL_FALSE, cam.data());//mViewCamera->world_to_cam());
+	glUniformMatrix4fv((*model_shader)["proj_matrix"], 1, GL_FALSE, ortho.data());//mViewCamera->cam_to_screen());
+	glDrawElements(GL_TRIANGLES, modelTrait.index.count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
 // Redraw function
@@ -249,9 +249,9 @@ void OGLViewer::mouseMoveEvent(QMouseEvent *e)
 void OGLViewer::resetCamera()
 {
 	mViewCamera.reset(new PerspectiveCamera(Point3f(10, 6, 10),
-                                            Point3f(0, 0, 0),
-                                            Vector3f(0, 1, 0),
-                                            width() / Float(height())));
+											Point3f(0, 0, 0),
+											Vector3f(0, 1, 0),
+											width() / Float(height())));
 }
 
 void OGLViewer::saveFrameBuffer()
